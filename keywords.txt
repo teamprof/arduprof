@@ -1,0 +1,39 @@
+#######################################
+# Syntax Coloring Map For Ethernet
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
+
+ThreadBase	KEYWORD1	ThreadBase
+MessageBus	KEYWORD1	MessageBus
+MessageQueue	KEYWORD1	MessageQueue
+Message	KEYWORD1	Message
+SoftwareTimer	KEYWORD1	SoftwareTimer
+PeriodicTimer	KEYWORD1	PeriodicTimer
+JsonMessage	KEYWORD1	JsonMessage
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
+
+start	KEYWORD2
+run	KEYWORD2
+setup	KEYWORD2
+delayInit	KEYWORD2
+onMessage	KEYWORD2
+messageLoop	KEYWORD2
+messageLoopForever	KEYWORD2
+context	KEYWORD2
+postEvent	KEYWORD2
+sendMessageToTask	KEYWORD2
+sendMessageFromIsrToTask	KEYWORD2
+queue	KEYWORD2
+timer	KEYWORD2
+serialize	KEYWORD2
+deserialize	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################
