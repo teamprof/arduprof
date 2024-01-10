@@ -29,14 +29,14 @@ The following boards are supported by this project:
 - Install [Arduino-ESP32](https://docs.espressif.com/projects/arduino-esp32/en/latest/installing.html)
 - Install [Arduino DebugLog](https://www.arduino.cc/reference/en/libraries/debuglog/)
 - Install [ArduinoJson](https://github.com/bblanchon/ArduinoJson)
-- Install [ArduProf](https://github.com/teamprof/ArduProf)
+- Install [ArduProf](https://www.arduino.cc/reference/en/libraries/arduprof/)
 
 ## Software setup for Raspherry Pi Pico (plan)
 - Install [Arduino IDE 2.2+ for Arduino](https://www.arduino.cc/en/Main/Software)
 - Install [Arduino Mbed OS RP2040 Boards 4.0.6+](https://github.com/arduino/ArduinoCore-mbed)
 - Install [Arduino DebugLog](https://www.arduino.cc/reference/en/libraries/debuglog/)
 - Install [ArduinoJson](https://github.com/bblanchon/ArduinoJson)
-- Install [ArduProf](https://github.com/teamprof/ArduProf)
+- Install [ArduProf](https://www.arduino.cc/reference/en/libraries/arduprof/)
 ---
 
 
