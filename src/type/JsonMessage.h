@@ -87,38 +87,13 @@ public:
         // LOG_TRACE("  message = ", message);
         this->clear();
         return deserializeJson(*this, message);
+    }
 
-        // switch (error.code())
-        // {
-        // case DeserializationError::Ok:
-        //     LOG_TRACE("DeserializationError::Ok");
-        //     DeserializationError verifyError = verify();
-        //     // LOG_TRACE("  (*this)[\"event\"] = ", (const char *)((*this)["event"]));
-        //     // LOG_TRACE("  (*this)[\"arg0\"] = ", (const char *)((*this)["arg0"]));
-        //     break;
-        // case DeserializationError::EmptyInput:
-        //     LOG_TRACE("DeserializationError::EmptyInput");
-        //     break;
-        // case DeserializationError::IncompleteInput:
-        //     LOG_TRACE("DeserializationError::IncompleteInput");
-        //     break;
-        // case DeserializationError::InvalidInput:
-        //     LOG_TRACE("DeserializationError::InvalidInput");
-        //     break;
-        // case DeserializationError::NoMemory:
-        //     LOG_TRACE("DeserializationError::NoMemory");
-        //     break;
-        // case DeserializationError::TooDeep:
-        //     LOG_TRACE("DeserializationError::TooDeep");
-        //     break;
-        // default:
-        //     LOG_TRACE("deserializeJson() returns error (", error.code(), ")");
-        //     break;
-        // }
-        // return error;
+    Stream *stream(void)
+    {
+        return _stream;
     }
 
 private:
     Stream *_stream;
-    // DeserializationError error;
 };
