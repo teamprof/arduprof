@@ -23,7 +23,7 @@
 
 #include "./AppEvent.h"
 
-class ThreadApp : public ThreadBase
+class ThreadApp : public ardufreertos::ThreadBase
 {
 public:
     ThreadApp();

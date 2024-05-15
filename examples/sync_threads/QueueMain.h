@@ -23,7 +23,7 @@
 
 #include "./AppEvent.h"
 
-class QueueMain final : public MessageBus
+class QueueMain final : public ardufreertos::MessageBus
 {
 public:
     QueueMain();

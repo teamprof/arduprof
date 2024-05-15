@@ -20,13 +20,16 @@
 #pragma once
 #include <Arduino.h>
 
-class MessageQueue;
-class ThreadBase;
+namespace ardufreertos
+{
+    class MessageQueue;
+    class ThreadBase;
+};
 
 typedef struct _AppContext
 {
-    MessageQueue *queueMain;
-    ThreadBase *threadApp;
+    ardufreertos::MessageQueue *queueMain;
+    ardufreertos::ThreadBase *threadApp;
 
 #if CONFIG_IDF_TARGET_ESP32 || CONFIG_IDF_TARGET_ESP32S3 || CONFIG_IDF_TARGET_ESP32C3
     SemaphoreHandle_t semaphore;

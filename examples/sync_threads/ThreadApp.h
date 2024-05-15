@@ -23,7 +23,7 @@
 
 #include "./AppEvent.h"
 
-class ThreadApp : public ThreadBase
+class ThreadApp : public ardufreertos::ThreadBase
 {
 public:
     ThreadApp();
@@ -39,7 +39,7 @@ private:
     static ThreadApp *_instance;
 
 #if CONFIG_IDF_TARGET_ESP32 || CONFIG_IDF_TARGET_ESP32S3 || CONFIG_IDF_TARGET_ESP32C3
-    PeriodicTimer _timer1Hz;
+    ardufreertos::PeriodicTimer _timer1Hz;
 #endif
 
     virtual void setup(void);

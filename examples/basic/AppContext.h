@@ -19,11 +19,14 @@
  */
 #pragma once
 
-class MessageQueue;
-class ThreadBase;
+namespace ardufreertos
+{
+    class MessageQueue;
+    class ThreadBase;
+};
 
 typedef struct _AppContext
 {
-    MessageQueue *queueMain;
-    ThreadBase *threadApp;
+    ardufreertos::MessageQueue *queueMain;
+    ardufreertos::ThreadBase *threadApp;
 } AppContext;

@@ -21,67 +21,73 @@
 #include <Arduino.h>
 #include "./MessageQueue.h"
 
-#if CONFIG_IDF_TARGET_ESP32 || CONFIG_IDF_TARGET_ESP32S3 || CONFIG_IDF_TARGET_ESP32C3
-class MessageBus : public MessageQueue
+#if defined ARDUPROF_FREERTOS
+
+namespace ardufreertos
 {
-public:
-    MessageBus(QueueHandle_t queue) : _isDone(false),
-                                      _context(nullptr),
-                                      MessageQueue(queue)
+    class MessageBus : public MessageQueue
     {
-    }
-
-    MessageBus(uint16_t queueLength,
-               uint8_t *pucQueueStorageBuffer = nullptr,
-               StaticQueue_t *pxQueueBuffer = nullptr) : _isDone(false),
-                                                         _context(nullptr),
-                                                         MessageQueue(queueLength,
-                                                                      pucQueueStorageBuffer,
-                                                                      pxQueueBuffer)
-    {
-    }
-
-    virtual void start(void *context)
-    {
-        _context = context;
-    }
-
-    virtual void onMessage(const Message &msg) = 0;
-
-    virtual void messageLoop(int ms = -1)
-    // virtual void messageLoop(TickType_t xTicksToWait = portMAX_DELAY)
-    {
-        configASSERT(_queue);
-
-        TickType_t xTicksToWait = (ms < 0) ? portMAX_DELAY : pdMS_TO_TICKS(ms);
-        Message msg;
-        if (xQueueReceive(_queue, (void *)&msg, xTicksToWait) == pdTRUE)
+    public:
+        MessageBus(QueueHandle_t queue) : _isDone(false),
+                                          _context(nullptr),
+                                          MessageQueue(queue)
         {
-            onMessage(msg);
         }
-        else
+
+        MessageBus(uint16_t queueLength,
+                   uint8_t *pucQueueStorageBuffer = nullptr,
+                   StaticQueue_t *pxQueueBuffer = nullptr) : _isDone(false),
+                                                             _context(nullptr),
+                                                             MessageQueue(queueLength,
+                                                                          pucQueueStorageBuffer,
+                                                                          pxQueueBuffer)
         {
-            // LOG_TRACE("xQueueReceive() timeout");
         }
-    }
 
-    virtual void messageLoopForever(void)
-    {
-        while (!_isDone)
+        virtual void start(void *context)
         {
-            messageLoop();
+            _context = context;
         }
-    }
 
-    void *context(void)
-    {
-        return _context;
-    }
+        virtual void onMessage(const Message &msg) = 0;
 
-protected:
-    void *_context;
+        virtual void messageLoop(int ms = -1)
+        // virtual void messageLoop(TickType_t xTicksToWait = portMAX_DELAY)
+        {
+            configASSERT(_queue);
 
-    // private:
-    bool _isDone;
-};
-#endif
+            TickType_t xTicksToWait = (ms < 0) ? portMAX_DELAY : pdMS_TO_TICKS(ms);
+            Message msg;
+            if (xQueueReceive(_queue, (void *)&msg, xTicksToWait) == pdTRUE)
+            {
+                onMessage(msg);
+            }
+            else
+            {
+                // LOG_TRACE("xQueueReceive() timeout");
+            }
+        }
+
+        virtual void messageLoopForever(void)
+        {
+            while (!_isDone)
+            {
+                messageLoop();
+            }
+        }
+
+        void *context(void)
+        {
+            return _context;
+        }
+
+    protected:
+        void *_context;
+
+        // private:
+        bool _isDone;
+    };
+
+} // namespace ardufreertos
+
+#endif // ARDUPROF_FREERTOS

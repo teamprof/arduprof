@@ -20,62 +20,67 @@
 #pragma once
 #include <Arduino.h>
 #include "../MessageBus.h"
+// #include "../../../../../FreeRTOS-Kernel/include/timers.h"
 
-#if CONFIG_IDF_TARGET_ESP32 || CONFIG_IDF_TARGET_ESP32S3 || CONFIG_IDF_TARGET_ESP32C3
+#if defined ARDUPROF_FREERTOS
 
-class ThreadBase : public MessageBus
+namespace ardufreertos
 {
-public:
-    ThreadBase(uint16_t queueLength,
-               uint8_t *pucQueueStorageBuffer = nullptr,
-               StaticQueue_t *pxQueueBuffer = nullptr) : MessageBus(queueLength, pucQueueStorageBuffer, pxQueueBuffer),
-                                                         _taskHandle(nullptr)
-
+    class ThreadBase : public MessageBus
     {
-        if (pucQueueStorageBuffer != nullptr && pxQueueBuffer != nullptr)
+    public:
+        ThreadBase(uint16_t queueLength,
+                   uint8_t *pucQueueStorageBuffer = nullptr,
+                   StaticQueue_t *pxQueueBuffer = nullptr) : MessageBus(queueLength, pucQueueStorageBuffer, pxQueueBuffer),
+                                                             _taskHandle(nullptr)
+
         {
-            _queue = xQueueCreateStatic(queueLength, sizeof(Message), pucQueueStorageBuffer, pxQueueBuffer);
-        }
-        else
+            if (pucQueueStorageBuffer != nullptr && pxQueueBuffer != nullptr)
+            {
+                _queue = xQueueCreateStatic(queueLength, sizeof(Message), pucQueueStorageBuffer, pxQueueBuffer);
+            }
+            else
+            {
+                _queue = xQueueCreate(queueLength, sizeof(Message));
+            }
+            configASSERT(_queue != NULL);
+        };
+
+        virtual void start(void *ctx)
         {
-            _queue = xQueueCreate(queueLength, sizeof(Message));
+            configASSERT(ctx);
+            _context = ctx;
         }
-        configASSERT(_queue != NULL);
+
+        virtual void run(void)
+        {
+            setup();
+
+            messageLoopForever();
+
+            vTaskDelay(pdMS_TO_TICKS(100)); // delay 100ms
+            vTaskDelete(_taskHandle);
+        }
+
+    protected:
+        virtual void setup(void)
+        {
+            BaseType_t result = xTimerPendFunctionCall(
+                [](void *param1, uint32_t param2)
+                {
+                    // LOG_TRACE("xTimerPendFunctionCall()");
+                    static_cast<ThreadBase *>(param1)->delayInit();
+                },
+                this,        // param1
+                (uint32_t)0, // param2
+                pdMS_TO_TICKS(200));
+            // LOG_TRACE("xTimerPendFunctionCall() returns ", result);
+        }
+        virtual void delayInit(void) {}
+
+        TaskHandle_t _taskHandle;
     };
 
-    virtual void start(void *ctx)
-    {
-        configASSERT(ctx);
-        _context = ctx;
-    }
+} // namespace ardufreertos
 
-    virtual void run(void)
-    {
-        setup();
-
-        messageLoopForever();
-
-        vTaskDelay(pdMS_TO_TICKS(100)); // delay 100ms
-        vTaskDelete(_taskHandle);
-    }
-
-protected:
-    virtual void setup(void)
-    {
-        BaseType_t result = xTimerPendFunctionCall(
-            [](void *param1, uint32_t param2)
-            {
-                // LOG_TRACE("xTimerPendFunctionCall()");
-                static_cast<ThreadBase *>(param1)->delayInit();
-            },
-            this,        // param1
-            (uint32_t)0, // param2
-            pdMS_TO_TICKS(200));
-        // LOG_TRACE("xTimerPendFunctionCall() returns ", result);
-    }
-    virtual void delayInit(void) {}
-
-    TaskHandle_t _taskHandle;
-};
-
-#endif
+#endif // ARDUPROF_FREERTOS

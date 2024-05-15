@@ -1,4 +1,4 @@
-/* Copyright 2023 teamprof.net@gmail.com
+/* Copyright 2024 teamprof.net@gmail.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the Software
@@ -24,10 +24,20 @@
 #include "./type/Message.h"
 #include "./type/JsonMessage.h"
 
+#if !defined ARDUPROF_MBED && !defined ARDUPROF_FREERTOS
 #if CONFIG_IDF_TARGET_ESP32 || CONFIG_IDF_TARGET_ESP32S3 || CONFIG_IDF_TARGET_ESP32C3
+#define ARDUPROF_FREERTOS
+#elif ARDUINO_ARCH_MBED_RP2040
+#define ARDUPROF_MBED
+#endif
+#endif
+
+#if defined ARDUPROF_FREERTOS
 #include "./os/freertos/thread/ThreadBase.h"
 #include "./os/freertos/peripheral/PeriodicTimer.h"
 #include "./os/freertos/peripheral/SoftwareTimer.h"
-#elif PICO_RP2040
+#include "./os/freertos/peripheral/Gpio.h"
+#elif defined ARDUPROF_MBED
 #error "RP2040 to be supported on version 2.0.0"
+// #include "./os/mbed/thread/ThreadBase.h"
 #endif

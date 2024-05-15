@@ -49,7 +49,7 @@ static StackType_t xStack[TASK_STACK_SIZE];
 static StaticTask_t xTaskBuffer;
 
 ////////////////////////////////////////////////////////////////////////////////////////////
-ThreadApp::ThreadApp() : ThreadBase(TASK_QUEUE_SIZE, ucQueueStorageArea, &xStaticQueue),
+ThreadApp::ThreadApp() : ardufreertos::ThreadBase(TASK_QUEUE_SIZE, ucQueueStorageArea, &xStaticQueue),
                          handlerMap()
 {
     _instance = this;

@@ -21,126 +21,151 @@
 #include <Arduino.h>
 #include "../../type/Message.h"
 
-#if CONFIG_IDF_TARGET_ESP32 || CONFIG_IDF_TARGET_ESP32S3 || CONFIG_IDF_TARGET_ESP32C3
-class MessageQueue
+// #include "../../../../FreeRTOS-Kernel/include/FreeRTOS.h"
+// #include "../../../../FreeRTOS-Kernel/include/queue.h"
+
+#if defined ARDUPROF_FREERTOS
+
+namespace ardufreertos
 {
-public:
-    MessageQueue(QueueHandle_t queue) : _queue(queue)
+    class MessageQueue
     {
-    }
-
-    MessageQueue(uint16_t queueLength,
-                 uint8_t *pucQueueStorageBuffer = nullptr,
-                 StaticQueue_t *pxQueueBuffer = nullptr)
-    {
-        if (pucQueueStorageBuffer != nullptr && pxQueueBuffer != nullptr)
+    public:
+        MessageQueue(QueueHandle_t queue) : _queue(queue),
+                                            _isStaticQueue(true) // queue is allocated outside, no to to delete in destructor
         {
-            _queue = xQueueCreateStatic(queueLength, sizeof(Message), pucQueueStorageBuffer, pxQueueBuffer);
         }
-        else
-        {
-            _queue = xQueueCreate(queueLength, sizeof(Message));
-        }
-        configASSERT(_queue != NULL);
-    }
 
-    ~MessageQueue()
-    {
-        vQueueDelete(_queue);
-        _queue = nullptr;
-    }
-
-    void postEvent(MessageQueue *msgQueue, int16_t event, int16_t iParam = 0, uint16_t uParam = 0, uint32_t lParam = 0L, TickType_t xTicksToWait = 0)
-    {
-        Message msg = {
-            .event = event,
-            .iParam = iParam,
-            .uParam = uParam,
-            .lParam = lParam,
-        };
-        postEvent(msgQueue, msg);
-    }
-    void postEvent(MessageQueue *msgQueue, const Message &msg, TickType_t xTicksToWait = 0)
-    {
-        if (msgQueue && msgQueue->_queue)
+        MessageQueue(uint16_t queueLength,
+                     uint8_t *pucQueueStorageBuffer = nullptr,
+                     StaticQueue_t *pxQueueBuffer = nullptr)
         {
-            if (xPortInIsrContext())
-            // if (xPortIsInsideInterrupt())
+            if (pucQueueStorageBuffer != nullptr && pxQueueBuffer != nullptr)
             {
-                BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-                if (xQueueSendFromISR(msgQueue->_queue, &msg, &xHigherPriorityTaskWoken) != pdTRUE)
-                {
-                    // LOG_ERROR("xQueueSend failed!");
-                }
-                portYIELD_FROM_ISR();
-                // portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+                _isStaticQueue = true;
+                _queue = xQueueCreateStatic(queueLength, sizeof(Message), pucQueueStorageBuffer, pxQueueBuffer);
             }
             else
             {
-                if (xQueueSend(msgQueue->_queue, &msg, xTicksToWait) != pdTRUE)
-                // if (xQueueSend(msgQueue->queue, &msg, portMAX_DELAY) != pdTRUE)
+                _isStaticQueue = false;
+                _queue = xQueueCreate(queueLength, sizeof(Message));
+            }
+            configASSERT(_queue != NULL);
+        }
+
+        ~MessageQueue()
+        {
+            QueueHandle_t queue = _queue;
+            _queue = nullptr;
+            if (!_isStaticQueue)
+            {
+                vQueueDelete(queue);
+                _isStaticQueue = true;
+            }
+        }
+
+        void postEvent(MessageQueue *msgQueue, int16_t event, int16_t iParam = 0, uint16_t uParam = 0, uint32_t lParam = 0L, TickType_t xTicksToWait = 0)
+        {
+            Message msg = {
+                .event = event,
+                .iParam = iParam,
+                .uParam = uParam,
+                .lParam = lParam,
+            };
+            postEvent(msgQueue, msg);
+        }
+        void postEvent(MessageQueue *msgQueue, const Message &msg, TickType_t xTicksToWait = 0)
+        {
+            if (msgQueue && msgQueue->_queue)
+            {
+                // if (xPortIsInsideInterrupt())
+                // {
+                //     BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+                //     if (xQueueSendFromISR(msgQueue->_queue, &msg, &xHigherPriorityTaskWoken) != pdTRUE)
+                //     {
+                //         // LOG_ERROR("xQueueSend failed!");
+                //     }
+                //     portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+                // }
+                if (xPortInIsrContext())
                 {
-                    // LOG_ERROR("xQueueSend failed!");
+                    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+                    if (xQueueSendFromISR(msgQueue->_queue, &msg, &xHigherPriorityTaskWoken) != pdTRUE)
+                    {
+                        // LOG_ERROR("xQueueSend failed!");
+                    }
+                    portYIELD_FROM_ISR();
+                }
+                else
+                {
+                    if (xQueueSend(msgQueue->_queue, &msg, xTicksToWait) != pdTRUE)
+                    // if (xQueueSend(msgQueue->queue, &msg, portMAX_DELAY) != pdTRUE)
+                    {
+                        // LOG_ERROR("xQueueSend failed!");
+                    }
                 }
             }
         }
-    }
 
-    inline void postEvent(int16_t event, int16_t iParam = 0, uint16_t uParam = 0, uint32_t lParam = 0L, TickType_t xTicksToWait = 0)
-    {
-        postEvent(this, event, iParam, uParam, lParam, xTicksToWait);
-    }
-    inline void postEvent(const Message &msg, TickType_t xTicksToWait = 0)
-    {
-        postEvent(this, msg, xTicksToWait);
-    }
-
-    void sendMessageToTask(int16_t event, int16_t iParam = 0, uint16_t uParam = 0, uint32_t lParam = 0L)
-    {
-        if (_queue == nullptr)
+        inline void postEvent(int16_t event, int16_t iParam = 0, uint16_t uParam = 0, uint32_t lParam = 0L, TickType_t xTicksToWait = 0)
         {
-            return;
+            postEvent(this, event, iParam, uParam, lParam, xTicksToWait);
+        }
+        inline void postEvent(const Message &msg, TickType_t xTicksToWait = 0)
+        {
+            postEvent(this, msg, xTicksToWait);
         }
 
-        Message msg = {
-            .event = event,
-            .iParam = iParam,
-            .uParam = uParam,
-            .lParam = lParam,
-        };
-        if (xQueueSend(_queue, &msg, 0) != pdTRUE)
-        // if (xQueueSend(queue, &msg, portMAX_DELAY) != pdTRUE)
+    protected:
+        QueueHandle_t _queue;
+        bool _isStaticQueue;
+
+        void sendMessageToTask(int16_t event, int16_t iParam = 0, uint16_t uParam = 0, uint32_t lParam = 0L)
         {
-            // DBGLOG(Debug, "%s - sendMessageToTask failed!", TAG);
-        }
-    }
+            if (_queue == nullptr)
+            {
+                return;
+            }
 
-    void sendMessageFromIsrToTask(int16_t event, int16_t iParam = 0, uint16_t uParam = 0, uint32_t lParam = 0L)
-    {
-        if (_queue == nullptr)
+            Message msg = {
+                .event = event,
+                .iParam = iParam,
+                .uParam = uParam,
+                .lParam = lParam,
+            };
+            if (xQueueSend(_queue, &msg, 0) != pdTRUE)
+            // if (xQueueSend(queue, &msg, portMAX_DELAY) != pdTRUE)
+            {
+                // DBGLOG(Debug, "%s - sendMessageToTask failed!", TAG);
+            }
+        }
+
+        void sendMessageFromIsrToTask(int16_t event, int16_t iParam = 0, uint16_t uParam = 0, uint32_t lParam = 0L)
         {
-            return;
+            if (_queue == nullptr)
+            {
+                return;
+            }
+
+            Message msg = {
+                .event = event,
+                .iParam = iParam,
+                .uParam = uParam,
+                .lParam = lParam,
+            };
+            BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+            xQueueSendFromISR(_queue, &msg, &xHigherPriorityTaskWoken);
+            portYIELD_FROM_ISR();
+            // portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
         }
 
-        Message msg = {
-            .event = event,
-            .iParam = iParam,
-            .uParam = uParam,
-            .lParam = lParam,
-        };
-        BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-        xQueueSendFromISR(_queue, &msg, &xHigherPriorityTaskWoken);
-        portYIELD_FROM_ISR();
-    }
+        inline QueueHandle_t queue(void)
+        {
+            return _queue;
+        }
+    };
 
-    inline QueueHandle_t queue(void)
-    {
-        return _queue;
-    }
-
-protected:
-    QueueHandle_t _queue;
-};
+} // namespace ardufreertos
 
 /////////////////////////////////////////////////////////////////////////////
 #define __EVENT_MAP(class, event)      \
@@ -151,4 +176,4 @@ protected:
 #define __EVENT_FUNC_DECLARATION(event) void handler##event(const Message &msg);
 /////////////////////////////////////////////////////////////////////////////
 
-#endif
+#endif // ARDUPROF_FREERTOS

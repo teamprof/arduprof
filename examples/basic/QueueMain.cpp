@@ -39,10 +39,11 @@ void QueueMain::printChipInfo(void)
     PRINTLN("===============================================================================");
     PRINTLN("ESP.getChipModel()=", ESP.getChipModel(), ", getChipRevision()=", ESP.getChipRevision(), ", getFlashChipSize()=", ESP.getFlashChipSize(),
             "\r\nNumber of cores=", ESP.getChipCores(), ", SDK version=", ESP.getSdkVersion());
+    PRINTLN("ArduProf version: ", ARDUPROF_VER);
     PRINTLN("===============================================================================");
 }
 
-QueueMain::QueueMain() : MessageBus(TASK_QUEUE_SIZE, ucQueueStorageArea, &xStaticQueue),
+QueueMain::QueueMain() : ardufreertos::MessageBus(TASK_QUEUE_SIZE, ucQueueStorageArea, &xStaticQueue),
                          handlerMap()
 {
     _instance = this;

@@ -19,54 +19,72 @@
  */
 #pragma once
 #include <Arduino.h>
+// #include "../../../../../FreeRTOS-Kernel/include/timers.h"
 
-#if CONFIG_IDF_TARGET_ESP32 || CONFIG_IDF_TARGET_ESP32S3 || CONFIG_IDF_TARGET_ESP32C3
-class SoftwareTimer
+#if defined ARDUPROF_FREERTOS
+
+namespace ardufreertos
 {
-public:
-    SoftwareTimer(const char *pcTimerName,
-                  const TickType_t xTimerPeriodInTicks,
-                  const UBaseType_t uxAutoReload,
-                  void *const pvTimerID,
-                  TimerCallbackFunction_t pxCallbackFunction)
+    class SoftwareTimer
     {
-        hTimer = xTimerCreate(pcTimerName,
-                              xTimerPeriodInTicks,
-                              uxAutoReload, // auto-reload when expire.
-                              pvTimerID,
-                              pxCallbackFunction);
-    }
+    public:
+        // SoftwareTimer()
+        // {
+        //     hTimer = nullptr;
+        // }
 
-    ~SoftwareTimer()
-    {
-        xTimerDelete(hTimer, 0);
-        hTimer = nullptr;
-    }
-
-    void start(void)
-    {
-        if (xTimerIsTimerActive(hTimer) == pdFALSE)
+        SoftwareTimer(const char *pcTimerName,
+                      const TickType_t xTimerPeriodInTicks,
+                      const UBaseType_t uxAutoReload,
+                      void *const pvTimerID,
+                      TimerCallbackFunction_t pxCallbackFunction)
         {
-            xTimerStart(hTimer, 0);
+            hTimer = xTimerCreate(pcTimerName,
+                                  xTimerPeriodInTicks,
+                                  uxAutoReload, // auto-reload when expire.
+                                  pvTimerID,
+                                  pxCallbackFunction);
         }
-    }
 
-    void stop(void)
-    {
-        if (xTimerIsTimerActive(hTimer) != pdFALSE)
+        ~SoftwareTimer()
         {
-            xTimerStop(hTimer, 0);
+            xTimerDelete(hTimer, 0);
+            hTimer = nullptr;
         }
-    }
 
-    TimerHandle_t timer(void)
-    {
-        return hTimer;
-    }
+        void start(void)
+        {
+            if (xTimerIsTimerActive(hTimer) == pdFALSE)
+            {
+                xTimerStart(hTimer, 0);
+            }
+        }
 
-protected:
-    TimerHandle_t hTimer;
+        void stop(void)
+        {
+            if (xTimerIsTimerActive(hTimer) != pdFALSE)
+            {
+                xTimerStop(hTimer, 0);
+            }
+        }
 
-private:
-};
-#endif
+        TimerHandle_t timer(void)
+        {
+            return hTimer;
+        }
+
+        // virtual void onEventTimer(void) {}
+        // // virtual void onEventTimer(void) = 0;
+
+    protected:
+        TimerHandle_t hTimer;
+
+        // virtual void isr(TimerHandle_t xTimer) {}
+        // virtual void IRAM_ATTR isr(TimerHandle_t xTimer) = 0;
+
+    private:
+    };
+
+} // namespace ardufreertos
+
+#endif // ARDUPROF_FREERTOS

@@ -21,7 +21,7 @@
 #include <Arduino.h>
 
 #define LIB_MAJOR_VER 1
-#define LIB_MINOR_VER 0
+#define LIB_MINOR_VER 2
 
 #define dim(x) (sizeof(x) / sizeof(x[0]))
 #define sizeofarray(a) (sizeof(a) / sizeof(a[0]))
@@ -37,3 +37,5 @@ static_assert(sizeof(unsigned long) == sizeof(uint32_t), "sizeof(unsigned long) 
 #ifndef STR
 #define STR(x) STR_INDIR(x)
 #endif
+
+#define ARDUPROF_VER STR(LIB_MAJOR_VER) "." STR(LIB_MINOR_VER)
