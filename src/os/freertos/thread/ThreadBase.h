@@ -18,7 +18,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 #pragma once
-#include <Arduino.h>
+#include <stdint.h>
+// #include <Arduino.h>
 #include "../MessageBus.h"
 // #include "../../../../../FreeRTOS-Kernel/include/timers.h"
 
@@ -74,6 +75,7 @@ namespace ardufreertos
                 this,        // param1
                 (uint32_t)0, // param2
                 pdMS_TO_TICKS(200));
+            UNUSED(result);
             // LOG_TRACE("xTimerPendFunctionCall() returns ", result);
         }
         virtual void delayInit(void) {}

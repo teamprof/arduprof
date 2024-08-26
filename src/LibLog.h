@@ -1,4 +1,4 @@
-/* Copyright 2023 teamprof.net@gmail.com
+/* Copyright 2024 teamprof.net@gmail.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the Software
@@ -19,6 +19,10 @@
  */
 #pragma once
 
+#if ARDUINO
+///////////////////////////////////////////////////////////////////////////////
+// Arduino
+///////////////////////////////////////////////////////////////////////////////
 // Disable Logging Macro (Release Mode)
 // #define DEBUGLOG_DISABLE_LOG
 // You can also set default log level by defining macro (default: INFO)
@@ -27,3 +31,14 @@
 #include <DebugLog.h> // https://github.com/hideakitai/DebugLog
 
 #define DefaultLogLevel (DebugLogLevel::LVL_TRACE)
+
+#elif defined ESP_PLATFORM
+///////////////////////////////////////////////////////////////////////////////
+// ESP32/ESP32S3/ESP32C3
+///////////////////////////////////////////////////////////////////////////////
+#undef LOG_LOCAL_LEVEL
+#define LOG_LOCAL_LEVEL ESP_LOG_VERBOSE
+#include <esp_log.h>
+
+///////////////////////////////////////////////////////////////////////////////
+#endif

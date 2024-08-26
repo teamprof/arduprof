@@ -33,6 +33,12 @@
 #endif
 
 #if defined ARDUPROF_FREERTOS
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "freertos/queue.h"
+#include "freertos/timers.h"
+// #include <FreeRTOS.h>
+// #include <task.h>
 #include "./os/freertos/thread/ThreadBase.h"
 #include "./os/freertos/peripheral/PeriodicTimer.h"
 #include "./os/freertos/peripheral/SoftwareTimer.h"

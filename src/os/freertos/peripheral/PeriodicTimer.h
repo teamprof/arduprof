@@ -18,7 +18,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 #pragma once
-#include <Arduino.h>
+#include <stdint.h>
+// #include <Arduino.h>
 #include "./SoftwareTimer.h"
 
 #if defined ARDUPROF_FREERTOS

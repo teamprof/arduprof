@@ -18,7 +18,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 #pragma once
-#include <Arduino.h>
+#include <stdint.h>
+// #include <Arduino.h>
 #include "../../type/Message.h"
 
 // #include "../../../../FreeRTOS-Kernel/include/FreeRTOS.h"

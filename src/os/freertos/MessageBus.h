@@ -18,7 +18,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 #pragma once
-#include <Arduino.h>
+#include <stdint.h>
+// #include <Arduino.h>
 #include "./MessageQueue.h"
 
 #if defined ARDUPROF_FREERTOS
@@ -28,19 +29,20 @@ namespace ardufreertos
     class MessageBus : public MessageQueue
     {
     public:
-        MessageBus(QueueHandle_t queue) : _isDone(false),
+        MessageBus(QueueHandle_t queue) : MessageQueue(queue),
                                           _context(nullptr),
-                                          MessageQueue(queue)
+                                          _isDone(false)
+
         {
         }
 
         MessageBus(uint16_t queueLength,
                    uint8_t *pucQueueStorageBuffer = nullptr,
-                   StaticQueue_t *pxQueueBuffer = nullptr) : _isDone(false),
-                                                             _context(nullptr),
-                                                             MessageQueue(queueLength,
+                   StaticQueue_t *pxQueueBuffer = nullptr) : MessageQueue(queueLength,
                                                                           pucQueueStorageBuffer,
-                                                                          pxQueueBuffer)
+                                                                          pxQueueBuffer),
+                                                             _context(nullptr),
+                                                             _isDone(false)
         {
         }
 
