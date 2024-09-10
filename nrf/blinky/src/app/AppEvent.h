@@ -18,39 +18,18 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 #pragma once
-
-#if defined ARDUINO
-#include <Arduino.h>
-#else
 #include <stdint.h>
-#endif
 
-////////////////////////////////////////////////////////////////////////////////////////////
-// v1.0: first release
-// v1.2: add namespace freertos
-// v1.3: support esp-idf toolchain
-// v1.4: prepare for zephyr
-#define LIB_MAJOR_VER 1
-#define LIB_MINOR_VER 4
-////////////////////////////////////////////////////////////////////////////////////////////
+enum AppEvent
+{
+    EventNull = 0,
 
-#define dim(x) (sizeof(x) / sizeof(x[0]))
-#define sizeofarray(a) (sizeof(a) / sizeof(a[0]))
+    EventSystem, // iParam=<SystemTriggerSource>
 
-static_assert(sizeof(void *) == sizeof(uint32_t), "sizeof(void *) == sizeof(uint32_t)");
-static_assert(sizeof(unsigned long) == sizeof(uint32_t), "sizeof(unsigned long) == sizeof(uint32_t)");
+};
 
-#ifndef UNUSED
-#define UNUSED(x) ((void)(x))
-#endif
-
-////////////////////////////////////////////////////////////////////////////////////////////
-#ifndef STR_INDIR
-#define STR_INDIR(x) #x
-#endif
-
-#ifndef STR
-#define STR(x) STR_INDIR(x)
-#endif
-
-#define ARDUPROF_VER STR(LIB_MAJOR_VER) "." STR(LIB_MINOR_VER)
+enum SystemTriggerSource
+{
+    SysNull = 0,
+    SysSoftwareTimer, // lParam=xTimer:uint32_t
+};

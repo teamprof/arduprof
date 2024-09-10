@@ -17,40 +17,27 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-#pragma once
+#include <stdbool.h>
+#include <zephyr/types.h>
+#include <zephyr/kernel.h>
+#include <zephyr/logging/log.h>
 
-#if defined ARDUINO
-#include <Arduino.h>
-#else
-#include <stdint.h>
-#endif
+#include "./app/AppContext.h"
+#include "./app/thread/QueueMain.h"
 
-////////////////////////////////////////////////////////////////////////////////////////////
-// v1.0: first release
-// v1.2: add namespace freertos
-// v1.3: support esp-idf toolchain
-// v1.4: prepare for zephyr
-#define LIB_MAJOR_VER 1
-#define LIB_MINOR_VER 4
-////////////////////////////////////////////////////////////////////////////////////////////
+#define LOG_LEVEL 4
+LOG_MODULE_REGISTER(main, LOG_LEVEL);
 
-#define dim(x) (sizeof(x) / sizeof(x[0]))
-#define sizeofarray(a) (sizeof(a) / sizeof(a[0]))
+int main(void)
+{
+	auto queueMain = QueueMain::getInstance();
+	AppContext appContext = {
+		.queueMain = queueMain,
+	};
 
-static_assert(sizeof(void *) == sizeof(uint32_t), "sizeof(void *) == sizeof(uint32_t)");
-static_assert(sizeof(unsigned long) == sizeof(uint32_t), "sizeof(unsigned long) == sizeof(uint32_t)");
+	queueMain->start(&appContext);
+	queueMain->postEvent(EventNull);
+	queueMain->messageLoopForever();
 
-#ifndef UNUSED
-#define UNUSED(x) ((void)(x))
-#endif
-
-////////////////////////////////////////////////////////////////////////////////////////////
-#ifndef STR_INDIR
-#define STR_INDIR(x) #x
-#endif
-
-#ifndef STR
-#define STR(x) STR_INDIR(x)
-#endif
-
-#define ARDUPROF_VER STR(LIB_MAJOR_VER) "." STR(LIB_MINOR_VER)
+	return 0;
+}

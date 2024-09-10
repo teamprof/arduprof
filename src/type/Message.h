@@ -18,8 +18,12 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 #pragma once
+
+#if defined ARDUINO // #if defined ARDUPROF_FREERTOS || defined ARDUPROF_MBED
+#include <Arduino.h>
+#elif defined ARDUPROF_ZEPHYR // #elif defined __ZEPHYR__
 #include <stdint.h>
-// #include <Arduino.h>
+#endif
 
 #ifdef __cplusplus
 extern "C"

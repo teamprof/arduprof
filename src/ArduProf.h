@@ -32,18 +32,29 @@
 #endif
 #endif
 
+///////////////////////////////////////////////////////////////////////////////
+// For FreeRTOS
 #if defined ARDUPROF_FREERTOS
+
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "freertos/queue.h"
 #include "freertos/timers.h"
-// #include <FreeRTOS.h>
-// #include <task.h>
 #include "./os/freertos/thread/ThreadBase.h"
 #include "./os/freertos/peripheral/PeriodicTimer.h"
 #include "./os/freertos/peripheral/SoftwareTimer.h"
 #include "./os/freertos/peripheral/Gpio.h"
+
+///////////////////////////////////////////////////////////////////////////////
+// For Zephyr
+#elif defined ARDUPROF_ZEPHYR
+#include "./os/zephyr/MessageQueue.h"
+#include "./os/zephyr/MessageBus.h"
+
+///////////////////////////////////////////////////////////////////////////////
+// For MBED
 #elif defined ARDUPROF_MBED
 #error "RP2040 to be supported on version 2.0.0"
-// #include "./os/mbed/thread/ThreadBase.h"
+
+///////////////////////////////////////////////////////////////////////////////
 #endif

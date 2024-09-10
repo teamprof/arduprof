@@ -1,0 +1,12 @@
+sample:
+  name: ArduProf Blinky Sample
+tests:
+  sample.basic.blinky:
+    tags:
+      - ArduProf
+      - LED
+    filter: 
+    depends_on: 
+    harness: led
+    integration_platforms:
+      - frdm_k64f

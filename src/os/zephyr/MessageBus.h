@@ -1,4 +1,4 @@
-/* Copyright 2024 teamprof.net@gmail.com
+/* Copyright 2023 teamprof.net@gmail.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the Software
@@ -19,38 +19,54 @@
  */
 #pragma once
 
-#if defined ARDUINO
-#include <Arduino.h>
-#else
-#include <stdint.h>
-#endif
+#ifdef ARDUPROF_ZEPHYR
 
-////////////////////////////////////////////////////////////////////////////////////////////
-// v1.0: first release
-// v1.2: add namespace freertos
-// v1.3: support esp-idf toolchain
-// v1.4: prepare for zephyr
-#define LIB_MAJOR_VER 1
-#define LIB_MINOR_VER 4
-////////////////////////////////////////////////////////////////////////////////////////////
+#include <stdbool.h>
+#include "./MessageQueue.h"
 
-#define dim(x) (sizeof(x) / sizeof(x[0]))
-#define sizeofarray(a) (sizeof(a) / sizeof(a[0]))
+namespace zephyros
+{
+    class MessageBus : public MessageQueue
+    {
+    public:
+        MessageBus(k_msgq *queue) : MessageQueue(queue), _context(nullptr), _isDone(false)
+        {
+        }
 
-static_assert(sizeof(void *) == sizeof(uint32_t), "sizeof(void *) == sizeof(uint32_t)");
-static_assert(sizeof(unsigned long) == sizeof(uint32_t), "sizeof(unsigned long) == sizeof(uint32_t)");
+        virtual void start(void *context)
+        {
+            _context = context;
+        }
 
-#ifndef UNUSED
-#define UNUSED(x) ((void)(x))
-#endif
+        virtual void onMessage(const Message &msg) = 0;
 
-////////////////////////////////////////////////////////////////////////////////////////////
-#ifndef STR_INDIR
-#define STR_INDIR(x) #x
-#endif
+        virtual void messageLoop(k_timeout_t timeout = K_FOREVER)
+        {
+            Message msg;
+            if (!k_msgq_get(queue(), &msg, timeout))
+            {
+                onMessage(msg);
+            }
+        }
 
-#ifndef STR
-#define STR(x) STR_INDIR(x)
-#endif
+        virtual void messageLoopForever(void)
+        {
+            while (!_isDone)
+            {
+                messageLoop();
+            }
+        }
 
-#define ARDUPROF_VER STR(LIB_MAJOR_VER) "." STR(LIB_MINOR_VER)
+        void *context(void)
+        {
+            return _context;
+        }
+
+    protected:
+        void *_context;
+        bool _isDone;
+    };
+
+} // namespace zephyros
+
+#endif // ARDUPROF_ZEPHYR
