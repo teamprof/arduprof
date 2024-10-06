@@ -19,7 +19,7 @@
  */
 
 /*
-  Example of serial log
+  Example of serial log, running on ESP32
     ===============================================================================
     ESP.getChipModel()=ESP32-C3, getChipRevision()=3, getFlashChipSize()=4194304
     Number of cores=1, SDK version=v4.4.5
@@ -33,11 +33,25 @@
     [TRACE] basic.ino L.89 loop : count=3
     [TRACE] ThreadApp.cpp L.105 handlerEventNull : EventNull(0), iParam=0, uParam=0, lParam=0
 
+  Example of serial log, running on W55RP20
+    ===============================================================================
+    rp2040_chip_version()=2, rp2040_rom_version()=3
+    ===============================================================================
+    [TRACE] ThreadApp.cppL.104start:get_id()=0, get_name()=application_unnamed_thread, get_priority()=-1
+    [TRACE] basic.inoL.103loop:count=0
+    [TRACE] basic.inoL.103[TRACE] ThreadApp.cppL.133handlerEventNull:EventNull(0), iParam=0, uParam=0, lParam=0
+    loop:count=1
+    [TRACE] basic.inoL.103[TRACE] loop:ThreadApp.cppcount=L.133handlerEventNull2
+    :EventNull(0), iParam=0, uParam=0, lParam=0
+    [TRACE] basic.inoL.103[TRACE] loopThreadApp.cpp:L.133count=handlerEventNull:EventNull(0), iParam=30
+    , uParam=0, lParam=0
+    [TRACE] basic.inoL.103[TRACE] loop:count=ThreadApp.cpp4
+    L.133handlerEventNull:EventNull(0), iParam=0, uParam=0, lParam=0
+
     Notice that two lines of log may be merged into one line, since threads are running in parallel.
     Please refer to the sync-threads example on using a semaphore for synchronization between threads.
 */
-#include <ArduProf.h>
-
+#include "./ArduProfApp.h"
 #include "./ThreadApp.h"
 #include "./QueueMain.h"
 #include "./AppContext.h"

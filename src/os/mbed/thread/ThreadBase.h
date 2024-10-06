@@ -19,39 +19,42 @@
  */
 #pragma once
 
-#if defined ARDUINO
-#include <Arduino.h>
-#else
-#include <stdint.h>
-#endif
+#if defined ARDUPROF_MBED
+#include "../MessageBus.h"
 
-////////////////////////////////////////////////////////////////////////////////////////////
-// v1.0: first release
-// v1.2: add namespace freertos
-// v1.3: support esp-idf toolchain
-// v1.4: prepare for zephyr
-// v2.0: support mbed
-#define LIB_MAJOR_VER 2
-#define LIB_MINOR_VER 0
-////////////////////////////////////////////////////////////////////////////////////////////
+namespace ardumbedos
+{
+    class ThreadBase : public MessageBus
+    {
+    public:
+        ThreadBase(events::EventQueue *queue) : MessageBus(queue)
+        {
+        }
 
-#define dim(x) (sizeof(x) / sizeof(x[0]))
-#define sizeofarray(a) (sizeof(a) / sizeof(a[0]))
+        ThreadBase(uint16_t queueSize = DefaultQueueSize) : MessageBus(queueSize)
+        {
+        }
 
-static_assert(sizeof(void *) == sizeof(uint32_t), "sizeof(void *) == sizeof(uint32_t)");
-static_assert(sizeof(unsigned long) == sizeof(uint32_t), "sizeof(unsigned long) == sizeof(uint32_t)");
+        virtual void start(void *context)
+        {
+            _context = context;
+            _thread.start(mbed::callback(this, &ThreadBase::run));
+        }
 
-#ifndef UNUSED
-#define UNUSED(x) ((void)(x))
-#endif
+        virtual void run(void)
+        {
+            setup();
 
-////////////////////////////////////////////////////////////////////////////////////////////
-#ifndef STR_INDIR
-#define STR_INDIR(x) #x
-#endif
+            assert(queue());
+            queue()->dispatch_forever();
+        }
 
-#ifndef STR
-#define STR(x) STR_INDIR(x)
-#endif
+    protected:
+        virtual void setup(void)
+        {
+        }
 
-#define ARDUPROF_VER STR(LIB_MAJOR_VER) "." STR(LIB_MINOR_VER)
+        rtos::Thread _thread;
+    };
+} // ardumbedos
+#endif // ARDUPROF_MBED

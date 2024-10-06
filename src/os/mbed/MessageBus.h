@@ -19,39 +19,55 @@
  */
 #pragma once
 
-#if defined ARDUINO
+#if defined ARDUPROF_MBED
 #include <Arduino.h>
-#else
-#include <stdint.h>
-#endif
+#include "./MessageQueue.h"
 
-////////////////////////////////////////////////////////////////////////////////////////////
-// v1.0: first release
-// v1.2: add namespace freertos
-// v1.3: support esp-idf toolchain
-// v1.4: prepare for zephyr
-// v2.0: support mbed
-#define LIB_MAJOR_VER 2
-#define LIB_MINOR_VER 0
-////////////////////////////////////////////////////////////////////////////////////////////
+namespace ardumbedos
+{
 
-#define dim(x) (sizeof(x) / sizeof(x[0]))
-#define sizeofarray(a) (sizeof(a) / sizeof(a[0]))
+    class MessageBus : public MessageQueue
+    {
+    public:
+        MessageBus(events::EventQueue *queue) : _isDone(false), _context(nullptr), MessageQueue(queue)
+        {
+        }
 
-static_assert(sizeof(void *) == sizeof(uint32_t), "sizeof(void *) == sizeof(uint32_t)");
-static_assert(sizeof(unsigned long) == sizeof(uint32_t), "sizeof(unsigned long) == sizeof(uint32_t)");
+        MessageBus(uint16_t queueSize = DefaultQueueSize) : _isDone(false), _context(nullptr), MessageQueue(queueSize)
+        {
+        }
 
-#ifndef UNUSED
-#define UNUSED(x) ((void)(x))
-#endif
+        virtual void start(void *context)
+        {
+            _context = context;
+        }
 
-////////////////////////////////////////////////////////////////////////////////////////////
-#ifndef STR_INDIR
-#define STR_INDIR(x) #x
-#endif
+        virtual void onMessage(const Message &msg) = 0;
 
-#ifndef STR
-#define STR(x) STR_INDIR(x)
-#endif
+        virtual void messageLoop(int ms = -1)
+        {
+            assert(_queue);
+            _queue->dispatch(ms);
+        }
 
-#define ARDUPROF_VER STR(LIB_MAJOR_VER) "." STR(LIB_MINOR_VER)
+        virtual void messageLoopForever(void)
+        {
+            while (!_isDone)
+            {
+                messageLoop();
+            }
+        }
+
+        void *context(void)
+        {
+            return _context;
+        }
+
+    protected:
+        void *_context;
+
+        bool _isDone;
+    };
+} // ardumbedos
+
+#endif // ARDUPROF_MBED

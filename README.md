@@ -1,7 +1,7 @@
 ## ArduProf framework
 The ArduProf lib library provides a thin layer framework that makes it easier for developers to code inter-thread communication by an event driven method.  
 version 1.0.0 supports FreeRTOS on ESP32.  
-version 2.0.0 (plan) supports Mbed OS on Raspherry Pi Pico (RP2040)
+version 2.0.0 supports Mbed OS on Raspherry Pi Pico (RP2040)
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL_v3-blue.svg)](https://github.com/teamprof/ArduProf/blob/main/LICENSE)
 
@@ -13,9 +13,9 @@ The following boards are supported by this project:
 - [ESP32-DevKitC V1](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/hw-reference/esp32/get-started-devkitc.html)
 - [ESP32-S3-DevKitC-1 v1.1](https://docs.espressif.com/projects/esp-idf/en/latest/esp32s3/hw-reference/esp32s3/user-guide-devkitc-1.html)
 - [ESP32C3-CORE](https://wiki.luatos.com/chips/esp32c3/board.html)
-- (v2.0.0 plan) [Raspberry Pi Pico](https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html)
-- (v2.0.0 plan) [W5100S-EVB-Pico](https://www.wiznet.io/product-item/w5100s-evb-pico/)
-- (v2.0.0 plan) [WizFi360-EVB-Pico](https://www.wiznet.io/product-item/wizfi360-evb-pico/)
+- (v2.0) [Raspberry Pi Pico](https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html)
+- (v2.0) [W5100S-EVB-Pico](https://www.wiznet.io/product-item/w5100s-evb-pico/)
+- (v2.0) [WizFi360-EVB-Pico](https://www.wiznet.io/product-item/wizfi360-evb-pico/)
 
 
 ---
@@ -193,7 +193,6 @@ Submit issues to: [ArduProf issues](https://github.com/teamprof/ArduProf/issues)
 ---
 ### TO DO
 - Search for bug and improvement.
-- Support Raspberry Pi Pico (RP2040) for version 2.0.0
 ---
 
 ### Contributions and Thanks
