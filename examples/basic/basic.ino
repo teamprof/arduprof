@@ -1,4 +1,4 @@
-/* Copyright 2024 teamprof.net@gmail.com
+/* Copyright 2025 teamprof.net@gmail.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the Software
@@ -86,7 +86,7 @@ void setup()
     LOG_SET_LEVEL(DefaultLogLevel);
     // LOG_SET_LEVEL(DebugLogLevel::LVL_TRACE);
     // LOG_SET_LEVEL(DebugLogLevel::LVL_NONE);
-    LOG_SET_DELIMITER("");
+    LOG_SET_DELIMITER(" ");
     LOG_ATTACH_SERIAL(Serial);
     /////////////////////////////////////////////////////////////////////////////
 
