@@ -79,15 +79,17 @@ namespace ardufreertos
         {
             if (msgQueue && msgQueue->_queue)
             {
-                // if (xPortIsInsideInterrupt())
-                // {
-                //     BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-                //     if (xQueueSendFromISR(msgQueue->_queue, &msg, &xHigherPriorityTaskWoken) != pdTRUE)
-                //     {
-                //         // LOG_ERROR("xQueueSend failed!");
-                //     }
-                //     portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-                // }
+#if defined ARDUINO_ARCH_RP2040
+                if (xPortIsInsideInterrupt())
+                {
+                    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+                    if (xQueueSendFromISR(msgQueue->_queue, &msg, &xHigherPriorityTaskWoken) != pdTRUE)
+                    {
+                        // LOG_ERROR("xQueueSend failed!");
+                    }
+                    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+                }
+#elif defined ARDUINO_ARCH_ESP32
                 if (xPortInIsrContext())
                 {
                     BaseType_t xHigherPriorityTaskWoken = pdFALSE;
@@ -97,6 +99,7 @@ namespace ardufreertos
                     }
                     portYIELD_FROM_ISR();
                 }
+#endif
                 else
                 {
                     if (xQueueSend(msgQueue->_queue, &msg, xTicksToWait) != pdTRUE)
@@ -156,8 +159,11 @@ namespace ardufreertos
             };
             BaseType_t xHigherPriorityTaskWoken = pdFALSE;
             xQueueSendFromISR(_queue, &msg, &xHigherPriorityTaskWoken);
+#if defined ARDUINO_ARCH_RP2040
+            portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+#elif defined ARDUINO_ARCH_ESP32
             portYIELD_FROM_ISR();
-            // portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+#endif
         }
 
         inline QueueHandle_t queue(void)
@@ -169,10 +175,7 @@ namespace ardufreertos
 } // namespace ardufreertos
 
 /////////////////////////////////////////////////////////////////////////////
-#define __EVENT_MAP(class, event)      \
-    {                                  \
-        event, &class ::handler##event \
-    }
+#define __EVENT_MAP(class, event) {event, &class ::handler##event}
 #define __EVENT_FUNC_DEFINITION(class, event, msg) void class ::handler##event(const Message &msg)
 #define __EVENT_FUNC_DECLARATION(event) void handler##event(const Message &msg);
 /////////////////////////////////////////////////////////////////////////////

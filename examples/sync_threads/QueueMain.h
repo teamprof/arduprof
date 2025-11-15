@@ -1,4 +1,4 @@
-/* Copyright 2024 teamprof.net@gmail.com
+/* Copyright 2026 teamprof.net@gmail.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the Software
@@ -19,11 +19,15 @@
  */
 #pragma once
 #include <map>
-#include <ArduProf.h>
 
+#include "./ArduProfApp.h"
 #include "./AppEvent.h"
 
+#if defined ARDUPROF_FREERTOS
 class QueueMain final : public ardufreertos::MessageBus
+#elif defined ARDUPROF_MBED
+class QueueMain final : public ardumbedos::MessageBus
+#endif
 {
 public:
     QueueMain();
@@ -35,7 +39,7 @@ public:
 
 protected:
     typedef void (QueueMain::*funcPtr)(const Message &);
-    std::map<int16_t, funcPtr> handlerMap;
+    std::map<int16_t, funcPtr> _handlerMap;
 
 private:
     static QueueMain *_instance;

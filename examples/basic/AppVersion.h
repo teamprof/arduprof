@@ -18,34 +18,22 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 #pragma once
-#include <map>
+#include <stdint.h>
 
-#include "./ArduProfApp.h"
-#include "./AppEvent.h"
+#define MajorVer 0
+#define MinorVer 1
+#define BuildVer 1
 
-#if defined ARDUPROF_FREERTOS
-class QueueMain final : public ardufreertos::MessageBus
-#elif defined ARDUPROF_MBED
-class QueueMain final : public ardumbedos::MessageBus
-#endif
+class AppVersion
 {
 public:
-    QueueMain();
+    static uint32_t getFirmwareVersion(void)
+    {
+        return (MajorVer << 24) | (MinorVer << 16) | (BuildVer);
+    }
 
-    virtual void start(void *);
-    virtual void onMessage(const Message &msg) override;
-
-    static void printChipInfo(void);
-
-protected:
-    typedef void (QueueMain::*funcPtr)(const Message &);
-    std::map<int16_t, funcPtr> _handlerMap;
-
-private:
-    static QueueMain *_instance;
-
-    ///////////////////////////////////////////////////////////////////////
-    // declare event handler
-    ///////////////////////////////////////////////////////////////////////
-    __EVENT_FUNC_DECLARATION(EventNull) // void handlerEventNull(const Message &msg);
+    static const char *getFirmwareVersionString(void)
+    {
+        return STR(MajorVer) "." STR(MinorVer) "." STR(BuildVer);
+    }
 };

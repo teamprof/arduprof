@@ -2,6 +2,7 @@
 The ArduProf lib library provides a thin layer framework that makes it easier for developers to code inter-thread communication by an event driven method.  
 version 1.0.0 supports FreeRTOS on ESP32.  
 version 2.0.0 supports Mbed OS on Raspherry Pi Pico (RP2040)
+version 2.2.0 supports FreeRTOS OS on Raspherry Pi Pico/Pico2 (RP2040/RP2350), update for ArduinoJson v7
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL_v3-blue.svg)](https://github.com/teamprof/ArduProf/blob/main/LICENSE)
 
@@ -13,9 +14,10 @@ The following boards are supported by this project:
 - [ESP32-DevKitC V1](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/hw-reference/esp32/get-started-devkitc.html)
 - [ESP32-S3-DevKitC-1 v1.1](https://docs.espressif.com/projects/esp-idf/en/latest/esp32s3/hw-reference/esp32s3/user-guide-devkitc-1.html)
 - [ESP32C3-CORE](https://wiki.luatos.com/chips/esp32c3/board.html)
-- (v2.0) [Raspberry Pi Pico](https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html)
-- (v2.0) [W5100S-EVB-Pico](https://www.wiznet.io/product-item/w5100s-evb-pico/)
-- (v2.0) [WizFi360-EVB-Pico](https://www.wiznet.io/product-item/wizfi360-evb-pico/)
+- [Raspberry Pi Pico](https://www.raspberrypi.com/documentation/microcontrollers/raspberry-pi-pico.html)
+- [W5100S-EVB-Pico](https://www.wiznet.io/product-item/w5100s-evb-pico/)
+- [WizFi360-EVB-Pico](https://www.wiznet.io/product-item/wizfi360-evb-pico/)
+- [Raspberry Pi Pico2](https://www.raspberrypi.com/products/raspberry-pi-pico-2/)
 
 
 ---
@@ -31,9 +33,10 @@ The following boards are supported by this project:
 - Install [ArduinoJson](https://github.com/bblanchon/ArduinoJson)
 - Install [ArduProf](https://www.arduino.cc/reference/en/libraries/arduprof/)
 
-## Software setup for Raspherry Pi Pico (plan)
+## Software setup for Raspherry Pi Pico/Pico2 
 - Install [Arduino IDE 2.2+ for Arduino](https://www.arduino.cc/en/Main/Software)
 - Install [Arduino Mbed OS RP2040 Boards 4.0.6+](https://github.com/arduino/ArduinoCore-mbed)
+- Install [Arduino Pico 5.4.2+](https://www.raspberrypi.com/products/raspberry-pi-pico-2/)
 - Install [Arduino DebugLog](https://www.arduino.cc/reference/en/libraries/debuglog/)
 - Install [ArduinoJson](https://github.com/bblanchon/ArduinoJson)
 - Install [ArduProf](https://www.arduino.cc/reference/en/libraries/arduprof/)
@@ -197,6 +200,9 @@ Submit issues to: [ArduProf issues](https://github.com/teamprof/ArduProf/issues)
 
 ### Contributions and Thanks
 Many thanks to the following authors who have developed great audio data and Arduino libraries.
+- [Arduino-ESP32](https://docs.espressif.com/projects/arduino-esp32/en/latest/installing.html)
+- [Arduino Mbed OS RP2040 Boards 4.0.6+](https://github.com/arduino/ArduinoCore-mbed)
+- [Arduino Pico 5.4.2+](https://www.raspberrypi.com/products/raspberry-pi-pico-2/)
 - [DebugLog](https://github.com/hideakitai/DebugLog)
 - [ArduinoJson](https://github.com/bblanchon/ArduinoJson)
 

@@ -1,4 +1,4 @@
-/* Copyright 2024 teamprof.net@gmail.com
+/* Copyright 2026 teamprof.net@gmail.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the Software
@@ -23,7 +23,60 @@
 ////////////////////////////////////////////////////////////////////////////////////////////
 ThreadApp *ThreadApp::_instance = nullptr;
 
-#if CONFIG_IDF_TARGET_ESP32 || CONFIG_IDF_TARGET_ESP32S3 || CONFIG_IDF_TARGET_ESP32C3
+#if defined ARDUPROF_FREERTOS && defined ARDUINO_ARCH_RP2040
+////////////////////////////////////////////////////////////////////////////////////////////
+// Thread for FreeRTOS RP2040/RP2350
+////////////////////////////////////////////////////////////////////////////////////////////
+
+static constexpr UBaseType_t uxCoreAffinityMask = ((1 << 0)); // task only run on core 0
+// static constexpr UBaseType_t uxCoreAffinityMask = ((1 << 1)); // task only run on core 1
+// static constexpr uxCoreAffinityMask = ( ( 1 << 0 ) | ( 1 << 2 ) );  // e.g. task can only run on core 0 and core 2
+
+#define TASK_NAME "ThreadApp"
+#define TASK_STACK_SIZE (4096 / sizeof(StackType_t))
+#define TASK_PRIORITY 10  // Priority, (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
+#define TASK_QUEUE_SIZE 8 // message queue size for app task
+
+#define TASK_INIT_NAME "taskDelayInit"
+#define TASK_INIT_STACK_SIZE (4096 / sizeof(StackType_t))
+#define TASK_INIT_PRIORITY 0
+
+static uint8_t ucQueueStorageArea[TASK_QUEUE_SIZE * sizeof(Message)];
+static StaticQueue_t xStaticQueue;
+
+static StackType_t xStack[TASK_STACK_SIZE];
+static StaticTask_t xTaskBuffer;
+
+///////////////////////////////////////////////////////////////////////
+ThreadApp::ThreadApp() : ThreadBase(TASK_QUEUE_SIZE, ucQueueStorageArea, &xStaticQueue),
+                         _handlerMap()
+{
+    _instance = this;
+
+    _handlerMap = {
+        __EVENT_MAP(ThreadApp, EventNull), // {EventNull, &ThreadApp::handlerEventNull},
+    };
+}
+
+void ThreadApp::start(void *ctx)
+{
+    LOG_TRACE("core", get_core_num());
+    configASSERT(ctx);
+    _context = ctx;
+
+    _taskHandle = xTaskCreateStatic(
+        [](void *instance)
+        { static_cast<ThreadBase *>(instance)->run(); },
+        TASK_NAME,
+        TASK_STACK_SIZE, // This stack size can be checked & adjusted by reading the Stack Highwater
+        this,
+        TASK_PRIORITY, // Priority, (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
+        xStack,
+        &xTaskBuffer);
+    vTaskCoreAffinitySet(_taskHandle, uxCoreAffinityMask); // Set the core affinity mask for the task, i.e. set task on running core
+}
+
+#elif defined ARDUPROF_FREERTOS && defined ESP_PLATFORM
 ////////////////////////////////////////////////////////////////////////////////////////////
 // Thread for ESP32
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -33,12 +86,12 @@ ThreadApp *ThreadApp::_instance = nullptr;
 #define RUNNING_CORE ARDUINO_RUNNING_CORE
 
 #define TASK_NAME "ThreadApp"
-#define TASK_STACK_SIZE 4096
+#define TASK_STACK_SIZE (4096 / sizeof(StackType_t))
 #define TASK_PRIORITY 3
-#define TASK_QUEUE_SIZE 128 // message queue size for app task
+#define TASK_QUEUE_SIZE 8 // message queue size for app task
 
 #define TASK_INIT_NAME "taskDelayInit"
-#define TASK_INIT_STACK_SIZE 4096
+#define TASK_INIT_STACK_SIZE (4096 / sizeof(StackType_t))
 #define TASK_INIT_PRIORITY 0
 
 static uint8_t ucQueueStorageArea[TASK_QUEUE_SIZE * sizeof(Message)];
@@ -49,12 +102,12 @@ static StaticTask_t xTaskBuffer;
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 ThreadApp::ThreadApp() : ardufreertos::ThreadBase(TASK_QUEUE_SIZE, ucQueueStorageArea, &xStaticQueue),
-                         handlerMap()
+                         _handlerMap()
 {
     _instance = this;
 
     // setup event handlers
-    handlerMap = {
+    _handlerMap = {
         __EVENT_MAP(ThreadApp, EventNull), // {EventNull, &ThreadApp::handlerEventNull},
     };
 }
@@ -75,6 +128,35 @@ void ThreadApp::start(void *ctx)
         &xTaskBuffer,
         RUNNING_CORE);
 }
+
+#elif defined ARDUPROF_MBED && defined ARDUINO_ARCH_MBED_RP2040
+////////////////////////////////////////////////////////////////////////////////////////////
+// Thread for MBed RP2040
+////////////////////////////////////////////////////////////////////////////////////////////
+#define THREAD_QUEUE_SIZE (128 * EVENTS_EVENT_SIZE) // message queue size for app thread
+
+/////////////////////////////////////////////////////////////////////////////
+// use static threadQueue instead of heap
+static events::EventQueue threadQueue(THREAD_QUEUE_SIZE);
+ThreadApp::ThreadApp() : ardumbedos::ThreadBase(&threadQueue),
+                         _handlerMap()
+/////////////////////////////////////////////////////////////////////////////
+// threadQueue is dynamically allocate from heap
+// ThreadApp::ThreadApp() : ThreadBase(THREAD_QUEUE_SIZE),
+//                          _handlerMap()
+/////////////////////////////////////////////////////////////////////////////
+{
+    _handlerMap = {
+        __EVENT_MAP(ThreadApp, EventNull), // {EventNull, &ThreadApp::handlerEventNull},
+    };
+}
+
+void ThreadApp::start(void *ctx)
+{
+    // LOG_TRACE("on core ", xPortGetCoreID(), ", xPortGetFreeHeapSize()=", xPortGetFreeHeapSize());
+    ThreadBase::start(ctx);
+}
+
 #endif
 
 void ThreadApp::setup(void)
@@ -86,7 +168,7 @@ void ThreadApp::setup(void)
 void ThreadApp::onMessage(const Message &msg)
 {
     // LOG_TRACE("event=", msg.event, ", iParam=", msg.iParam, ", uParam=", msg.uParam, ", lParam=", msg.lParam);
-    auto func = handlerMap[msg.event];
+    auto func = _handlerMap[msg.event];
     if (func)
     {
         (this->*func)(msg);

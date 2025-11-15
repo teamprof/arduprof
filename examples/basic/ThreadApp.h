@@ -1,4 +1,4 @@
-/* Copyright 2024 teamprof.net@gmail.com
+/* Copyright 2026 teamprof.net@gmail.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the Software
@@ -19,11 +19,15 @@
  */
 #pragma once
 #include <map>
-#include <ArduProf.h>
 
+#include "./ArduProfApp.h"
 #include "./AppEvent.h"
 
+#if defined ARDUPROF_FREERTOS
 class ThreadApp : public ardufreertos::ThreadBase
+#elif defined ARDUPROF_MBED
+class ThreadApp : public ardumbedos::ThreadBase
+#endif
 {
 public:
     ThreadApp();
@@ -33,7 +37,7 @@ public:
 
 protected:
     typedef void (ThreadApp::*handlerFunc)(const Message &);
-    std::map<int16_t, handlerFunc> handlerMap;
+    std::map<int16_t, handlerFunc> _handlerMap;
 
 private:
     static ThreadApp *_instance;

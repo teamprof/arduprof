@@ -26,8 +26,9 @@
 #include <Arduino.h>
 #include <ArduinoJson.h>
 
-template <size_t desiredCapacity>
-class JsonMessage : public StaticJsonDocument<desiredCapacity>
+class JsonMessage : public JsonDocument // for ArduinoJson v7
+// template <size_t desiredCapacity>
+// class JsonMessage : public StaticJsonDocument<desiredCapacity>       // for ArduinoJson v6
 {
 public:
     JsonMessage(Stream *stream = nullptr) : _stream(stream)
@@ -44,7 +45,8 @@ public:
         (*this)["arg1"] = arg1;
         if (data)
         {
-            JsonArray jsonData = this->createNestedArray("data");
+            JsonArray jsonData = (*this)["data"].to<JsonArray>(); // for ArduinoJson v7
+            // JsonArray jsonData = this->createNestedArray("data");    // for ArduinoJson v6
             for (uint16_t i = 0; i < length; i++)
             {
                 jsonData.add((uint8_t)(data[i]));

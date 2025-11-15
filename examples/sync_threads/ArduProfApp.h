@@ -1,4 +1,4 @@
-/* Copyright 2024 teamprof.net@gmail.com
+/* Copyright 2026 teamprof.net@gmail.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the Software
@@ -23,7 +23,13 @@
 #undef ARDUPROF_ZEPHYR
 #undef ARDUPROF_MBED
 
-// For ESP32S3
+// // For ESP32S3
+// #define ARDUPROF_FREERTOS
+// #include <ArduProf.h>
+
+// For Pi Pico2 board (FreeRTOS)
+// note: Operation System: "FreeRTOS SMP"
+//       USB Stack: "Pico SDK"
 #define ARDUPROF_FREERTOS
 #include <ArduProf.h>
 

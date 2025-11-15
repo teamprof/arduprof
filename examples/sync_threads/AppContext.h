@@ -1,4 +1,4 @@
-/* Copyright 2024 teamprof.net@gmail.com
+/* Copyright 2026 teamprof.net@gmail.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the Software
@@ -18,8 +18,8 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 #pragma once
-#include <Arduino.h>
 
+#if defined ARDUPROF_FREERTOS
 namespace ardufreertos
 {
     class MessageQueue;
@@ -31,8 +31,23 @@ typedef struct _AppContext
     ardufreertos::MessageQueue *queueMain;
     ardufreertos::ThreadBase *threadApp;
 
-#if CONFIG_IDF_TARGET_ESP32 || CONFIG_IDF_TARGET_ESP32S3 || CONFIG_IDF_TARGET_ESP32C3
+    // #if CONFIG_IDF_TARGET_ESP32 || CONFIG_IDF_TARGET_ESP32S3 || CONFIG_IDF_TARGET_ESP32C3
     SemaphoreHandle_t semaphore;
-#endif
+    // #endif
 
 } AppContext;
+
+#elif defined ARDUPROF_MBED
+namespace ardumbedos
+{
+    class MessageQueue;
+    class ThreadBase;
+};
+
+typedef struct _AppContext
+{
+    ardumbedos::MessageQueue *queueMain;
+    ardumbedos::ThreadBase *threadApp;
+} AppContext;
+
+#endif

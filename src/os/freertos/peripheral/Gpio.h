@@ -19,9 +19,93 @@
  */
 #pragma once
 
-#if ARDUINO
+#if defined ARDUINO_ARCH_RP2040
 ///////////////////////////////////////////////////////////////////////////////
-// Arduino
+// Arduino for RP2040 FreeRTOS OS
+///////////////////////////////////////////////////////////////////////////////
+#include <Arduino.h>
+class Gpio
+{
+public:
+    Gpio(uint8_t pin,
+         PinMode mode = INPUT,
+         uint8_t initialValue = LOW) : _PIN(pin),
+                                       _ioMode(mode),
+                                       _value(initialValue),
+                                       _isIntrEnable(false)
+    {
+        if (mode == OUTPUT || mode == OUTPUT_OPENDRAIN)
+        {
+            digitalWrite(_PIN, initialValue);
+        }
+        pinMode(mode);
+    }
+
+    ~Gpio()
+    {
+        // esp_err_t rst = gpio_reset_pin(_PIN);
+    }
+
+    void pinMode(PinMode ioMode)
+    {
+        _ioMode = ioMode;
+        ::pinMode(_PIN, ioMode);
+    }
+
+    int read(void)
+    {
+        return digitalRead(_PIN);
+    }
+
+    void write(uint8_t value)
+    {
+        _value = value;
+        digitalWrite(_PIN, value);
+    }
+
+    void attachIntr(PinStatus intrMode, void (*isr)(void))
+    {
+        if (!_isIntrEnable)
+        {
+            attachInterrupt(digitalPinToInterrupt(_PIN), isr, intrMode);
+            _isIntrEnable = true;
+        }
+    }
+
+    void attachIntr(PinStatus intrMode, void (*isr)(void *), void *arg)
+    {
+        if (!_isIntrEnable)
+        {
+            attachInterruptParam(digitalPinToInterrupt(_PIN), isr, intrMode, arg);
+            _isIntrEnable = true;
+        }
+    }
+
+    void detachIntr(void)
+    {
+        if (_isIntrEnable)
+        {
+            detachInterrupt(digitalPinToInterrupt(_PIN));
+            _isIntrEnable = false;
+        }
+    }
+
+    uint8_t getPin(void)
+    {
+        return _PIN;
+    }
+
+protected:
+    const uint8_t _PIN;
+    uint8_t _ioMode;
+    uint8_t _value;
+
+    bool _isIntrEnable;
+};
+
+#elif defined ARDUINO_ARCH_MBED_RP2040
+///////////////////////////////////////////////////////////////////////////////
+// Arduino for RP2040 Mbed OS
 ///////////////////////////////////////////////////////////////////////////////
 #include <Arduino.h>
 class Gpio
