@@ -24,6 +24,7 @@
 #undef ARDUPROF_MBED
 
 // // For ESP32/ESP32C3/ESP32S3
+// // note: USB CDC On Boot: :Enabled"
 // #define ARDUPROF_FREERTOS
 // #include <ArduProf.h>
 

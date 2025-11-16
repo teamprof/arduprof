@@ -38,6 +38,7 @@ typedef struct _AppContext
 } AppContext;
 
 #elif defined ARDUPROF_MBED
+#include <mbed.h>
 namespace ardumbedos
 {
     class MessageQueue;
@@ -48,6 +49,8 @@ typedef struct _AppContext
 {
     ardumbedos::MessageQueue *queueMain;
     ardumbedos::ThreadBase *threadApp;
+
+    rtos::Semaphore *semaphore;
 } AppContext;
 
 #endif

@@ -31,7 +31,7 @@
 // v1.3: support esp-idf toolchain
 // v1.4: prepare for zephyr
 // v2.0: support mbed
-// v2.2: support pico/pico2 freertos, revise for ArduinoJson v7
+// v2.2.0: support pico/pico2 freertos, revise for ArduinoJson v7
 #define LIB_MAJOR_VER 2
 #define LIB_MINOR_VER 2
 ////////////////////////////////////////////////////////////////////////////////////////////

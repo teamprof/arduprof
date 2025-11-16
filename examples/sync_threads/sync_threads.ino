@@ -1,4 +1,4 @@
-/* Copyright 2025 teamprof.net@gmail.com
+/* Copyright 2026 teamprof.net@gmail.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the Software
@@ -19,22 +19,54 @@
  */
 
 /*
-  Example of serial log
+  Example of serial log, running on ESP32S3
+    [TRACE] QueueMain.cpp L.102 start : on core  1 , xPortGetFreeHeapSize()= 346348
     ===============================================================================
-    ESP.getChipModel()=ESP32-C3, getChipRevision()=3, getFlashChipSize()=4194304
-    Number of cores=1, SDK version=v4.4.5
+    App Firmware version= 0.1.1
+    ESP.getChipModel()= ESP32-S3 , getChipRevision()= 1 , getFlashChipSize()= 8388608
+    Number of cores= 2 , SDK version= v5.5-1-gb66b5448e0
+    PSRAM total size= 0  bytes, PSRAM free size= 0  bytes
     ===============================================================================
-    [TRACE] sync_threads.ino L.97 loop : count=0
-    [TRACE] ThreadApp.cpp L.138 handlerEventNull : EventNull(0), iParam=0, uParam=0, lParam=0
-    [TRACE] sync_threads.ino L.97 loop : count=1
-    [TRACE] QueueMain.cpp L.89 handlerEventNull : EventNull(0), iParam=0, uParam=0, lParam=0
-    [TRACE] ThreadApp.cpp L.138 handlerEventNull : EventNull(0), iParam=0, uParam=0, lParam=0
-    [TRACE] sync_threads.ino L.97 loop : count=2
-    [TRACE] QueueMain.cpp L.89 handlerEventNull : EventNull(0), iParam=0, uParam=0, lParam=0
-    [TRACE] ThreadApp.cpp L.138 handlerEventNull : EventNull(0), iParam=0, uParam=0, lParam=0
-    [TRACE] sync_threads.ino L.97 loop : count=3
-    [TRACE] QueueMain.cpp L.89 handlerEventNull : EventNull(0), iParam=0, uParam=0, lParam=0
-    [TRACE] ThreadApp.cpp L.138 handlerEventNull : EventNull(0), iParam=0, uParam=0, lParam=0
+    [TRACE] sync_threads.ino L.110 loop : count= 0
+    [TRACE] ThreadApp.cpp L.204 handlerEventNull : EventNull( 0 ), iParam= 0 , uParam= 0 , lParam= 0
+    [TRACE] sync_threads.ino L.110 loop : count= 1
+    [TRACE] ThreadApp.cpp L.204 handlerEventNull : EventNull( 0 ), iParam= 0 , uParam= 0 , lParam= 0
+    [TRACE] sync_threads.ino L.110 loop : count= 2
+    [TRACE] ThreadApp.cpp L.204 handlerEventNull : EventNull( 0 ), iParam= 0 , uParam= 0 , lParam= 0
+
+
+  Example of serial log, running on Pi Pico2 with FreeRTOS
+    [TRACE] QueueMain.cpp L.100 start : core 0
+    ===============================================================================
+    App Firmware version= 0.1.1
+    rp2040_chip_version(): 2 , rp2040_rom_version(): 2
+    PSRAM total size: 0
+    total heap: 500548 , free heap: 492048
+    ===============================================================================
+    [TRACE] ThreadApp.cpp L.69 start : core 0
+    [TRACE] sync_threads.ino L.110 loop : count= 0
+    [TRACE] ThreadApp.cpp L.204 handlerEventNull : EventNull( 0 ), iParam= 0 , uParam= 0 , lParam= 0
+    [TRACE] sync_threads.ino L.110 loop : count= 1
+    [TRACE] ThreadApp.cpp L.204 handlerEventNull : EventNull( 0 ), iParam= 0 , uParam= 0 , lParam= 0
+    [TRACE] sync_threads.ino L.110 loop : count= 2
+    [TRACE] ThreadApp.cpp L.204 handlerEventNull : EventNull( 0 ), iParam= 0 , uParam= 0 , lParam= 0
+
+
+  Example of serial log, running on Pi Pico with MBed OS
+    [TRACE] QueueMain.cpp L.104 start : ...
+    ===============================================================================
+    App Firmware version= 0.1.1
+    rp2040_chip_version()= 1 , rp2040_rom_version()= 2
+    ===============================================================================
+    [TRACE] sync_threads.ino L.115 loop : count= 0
+    [TRACE] sync_threads.ino L.115 loop : count= 1
+    [TRACE] ThreadApp.cpp L.212 handlerEventNull : EventNull( 0 ), iParam= 0 , uParam= 0 , lParam= 0
+    [TRACE] sync_threads.ino L.115 loop : count= 2
+    [TRACE] ThreadApp.cpp L.212 handlerEventNull : EventNull( 0 ), iParam= 0 , uParam= 0 , lParam= 0
+    [TRACE] sync_threads.ino L.115 loop : count= 3
+    [TRACE] ThreadApp.cpp L.212 handlerEventNull : EventNull( 0 ), iParam= 0 , uParam= 0 , lParam= 0
+
+
 */
 #include "./ArduProfApp.h"
 #include "./ThreadApp.h"
@@ -48,13 +80,19 @@ static QueueMain queueMain;
 // define variable "threadApp" for application thread. (Define other thread as you need)
 static ThreadApp threadApp;
 
+#if defined ARDUPROF_MBED
+static rtos::Semaphore semaphore(1);
+#endif
+
 // define variable "context" and initialize pointers to "queueMain" and "threadApp"
 static AppContext context = {
     .queueMain = &queueMain,
     .threadApp = &threadApp,
 
-#if CONFIG_IDF_TARGET_ESP32 || CONFIG_IDF_TARGET_ESP32S3 || CONFIG_IDF_TARGET_ESP32C3
+#if defined ARDUPROF_FREERTOS
     .semaphore = xSemaphoreCreateMutex(),
+#elif defined ARDUPROF_MBED
+    .semaphore = &semaphore,
 #endif
 };
 
@@ -90,12 +128,16 @@ void loop()
 {
     static int count = 0;
 
-#if CONFIG_IDF_TARGET_ESP32 || CONFIG_IDF_TARGET_ESP32S3 || CONFIG_IDF_TARGET_ESP32C3
+#if defined ARDUPROF_FREERTOS
     if (xSemaphoreTake(context.semaphore, portMAX_DELAY) == pdTRUE)
     {
         LOG_TRACE("count=", count++);
         xSemaphoreGive(context.semaphore);
     }
+#elif defined ARDUPROF_MBED
+    context.semaphore->acquire();
+    LOG_TRACE("count=", count++);
+    context.semaphore->release();
 #endif
 
     // process message in queueMain if available

@@ -36,7 +36,7 @@ The following boards are supported by this project:
 ## Software setup for Raspherry Pi Pico/Pico2 
 - Install [Arduino IDE 2.2+ for Arduino](https://www.arduino.cc/en/Main/Software)
 - Install [Arduino Mbed OS RP2040 Boards 4.0.6+](https://github.com/arduino/ArduinoCore-mbed)
-- Install [Arduino Pico 5.4.2+](https://www.raspberrypi.com/products/raspberry-pi-pico-2/)
+- Install [Arduino Pico 5.4.1+](https://www.raspberrypi.com/products/raspberry-pi-pico-2/)
 - Install [Arduino DebugLog](https://www.arduino.cc/reference/en/libraries/debuglog/)
 - Install [ArduinoJson](https://github.com/bblanchon/ArduinoJson)
 - Install [ArduProf](https://www.arduino.cc/reference/en/libraries/arduprof/)
@@ -80,11 +80,31 @@ It includes fields such as "event" (signed word), "iParam" (signed word), "uPara
     } Message;
 ```
 
+On version 2.2.0 or above, a "ArduProfApp.h" header file is added to simplify switching between OS.
+For example, switching to ESP32/ESP32C3/ESP32S3 is shown as below:
+    // For ESP32/ESP32C3/ESP32S3
+    // note: USB CDC On Boot: :Enabled"
+    #define ARDUPROF_FREERTOS
+    #include <ArduProf.h>
+
+switching to FreeRTOS RP2040/RP2350 is shown as below:
+    // For Pi Pico2 board (FreeRTOS)
+    // note: Operation System: "FreeRTOS SMP"
+    //       USB Stack: "Pico SDK"
+    #define ARDUPROF_FREERTOS
+    #include <ArduProf.h>
+
+switching to MBed RP2040 is shown as below:
+    // For Pi Pico Mbed
+    #define ARDUPROF_MBED
+    #include <ArduProf.h>
+
+
 Example 1: post event from Arduino loop to ThreadApp  
-The first step to use ArduProf framework is including the "ArduProf.h" header file. Then defines "queueMain" and "threadApp" and starts them. Posting an event "EventNull" from "queueMain" to "threadApp" is simply as "queueMain.postEvent(context.threadApp, EventNull)"
+The first step to use ArduProf framework is including the "ArduProfApp.h" header file. Then defines "queueMain" and "threadApp" and starts them. Posting an event "EventNull" from "queueMain" to "threadApp" is simply as "queueMain.postEvent(context.threadApp, EventNull)"
 Sample code is listed in file "basic.ino"
 ```
-#include <ArduProf.h>
+#include "ArduProfApp.h"
 ...
 
 // define variable "queueMain" for Arduino thred to interact with ArduProf framework.
@@ -202,7 +222,7 @@ Submit issues to: [ArduProf issues](https://github.com/teamprof/ArduProf/issues)
 Many thanks to the following authors who have developed great audio data and Arduino libraries.
 - [Arduino-ESP32](https://docs.espressif.com/projects/arduino-esp32/en/latest/installing.html)
 - [Arduino Mbed OS RP2040 Boards 4.0.6+](https://github.com/arduino/ArduinoCore-mbed)
-- [Arduino Pico 5.4.2+](https://www.raspberrypi.com/products/raspberry-pi-pico-2/)
+- [Arduino Pico 5.4.1+](https://www.raspberrypi.com/products/raspberry-pi-pico-2/)
 - [DebugLog](https://github.com/hideakitai/DebugLog)
 - [ArduinoJson](https://github.com/bblanchon/ArduinoJson)
 

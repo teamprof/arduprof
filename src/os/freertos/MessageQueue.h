@@ -80,7 +80,8 @@ namespace ardufreertos
             if (msgQueue && msgQueue->_queue)
             {
 #if defined ARDUINO_ARCH_RP2040
-                if (xPortIsInsideInterrupt())
+                if (portCHECK_IF_IN_ISR())
+                // if (xPortIsInsideInterrupt())
                 {
                     BaseType_t xHigherPriorityTaskWoken = pdFALSE;
                     if (xQueueSendFromISR(msgQueue->_queue, &msg, &xHigherPriorityTaskWoken) != pdTRUE)
