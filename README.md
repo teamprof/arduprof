@@ -9,7 +9,7 @@ version 2.2.0 supports FreeRTOS OS on Raspherry Pi Pico/Pico2 (RP2040/RP2350), u
 <a href="https://www.buymeacoffee.com/teamprof" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 28px !important;width: 108px !important;" ></a>
 
 ---
-## supported Hardware (ESP32, ESP32-S3, ESP32C3)
+## supported Hardware (ESP32, ESP32-S3, ESP32C3, Pi Pico/Pico2)
 The following boards are supported by this project:
 - [ESP32-DevKitC V1](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/hw-reference/esp32/get-started-devkitc.html)
 - [ESP32-S3-DevKitC-1 v1.1](https://docs.espressif.com/projects/esp-idf/en/latest/esp32s3/hw-reference/esp32s3/user-guide-devkitc-1.html)
