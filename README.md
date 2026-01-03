@@ -22,7 +22,7 @@ The following boards are supported by this project:
 
 ---
 ### ArduProf framework diagram
-[![framework diagram](/doc/image/framework-diagram.png)](https://github.com/teamprof/ArduProf/blob/main/image/framework-diagram.png)
+[![framework diagram](./doc/image/framework-diagram.png)](https://github.com/teamprof/ArduProf/blob/main/doc/image/framework-diagram.png)
 
 
 ---
@@ -46,13 +46,13 @@ The following boards are supported by this project:
 ## Build demo code (basic example for ESP32C3)
 - launch the Arduino IDE
 - create a new project of example "basic" by clicking Menu -> "File" -> "Examples" -> "ArduProf" -> "basic"  
-[![New example - basic](/doc/image/example-basic-new.png)](https://github.com/teamprof/ArduProf/blob/main/image/example-basic-new.png)
+[![New example - basic](./doc/image/example-basic-new.png)](https://github.com/teamprof/ArduProf/blob/main/doc/image/example-basic-new.png)
 - select ESP32C3 Dev Module by clicking Menu -> “Tools” -> “Select Board” -> "ESP32C3 Dev Module"  
 - config ESP32C3 Dev Module settings as below  
-[![Config example - basic](/doc/image/example-basic-esp32c3-settings.png)](https://github.com/teamprof/ArduProf/blob/main/image/example-basic-esp32c3-settings.png)
+[![Config example - basic](./doc/image/example-basic-esp32c3-settings.png)](https://github.com/teamprof/ArduProf/blob/main/doc/image/example-basic-esp32c3-settings.png)
 - build the code by clicking Menu -> “Sketch” -> “Compile/Verify”  
 If everything goes smoothly, you should see the following screen.
-[![example-basic-build](/doc/image/example-basic-build.png)](https://github.com/teamprof/ArduProf/blob/main/image/example-basic-build.png)
+[![example-basic-build](./doc/image/example-basic-build.png)](https://github.com/teamprof/ArduProf/blob/main/doc/image/example-basic-build.png)
 
 
 
@@ -60,10 +60,10 @@ If everything goes smoothly, you should see the following screen.
 - select the ESP32C3 virtual port by clicking Menu -> “Tools” -> “Port” -> ...
 - build the code by clicking Menu -> “Sketch” -> “Upload”  
 If everything goes smoothly, you should see the following screen.
-[![example-basic-upload](/doc/image/example-basic-upload.png)](https://github.com/teamprof/ArduProf/blob/main/image/example-basic-upload.png)
+[![example-basic-upload](./doc/image/example-basic-upload.png)](https://github.com/teamprof/ArduProf/blob/main/doc/image/example-basic-upload.png)
 
 Serial monitor log output  
-[![example-basic-serial-log](/doc/image/example-basic-serial-log.png)](https://github.com/teamprof/ArduProf/blob/main/image/example-basic-serial-log.png)
+[![example-basic-serial-log](./doc/image/example-basic-serial-log.png)](https://github.com/teamprof/ArduProf/blob/main/doc/image/example-basic-serial-log.png)
 
 
 
@@ -94,7 +94,7 @@ switching to FreeRTOS RP2040/RP2350 is shown as below:
     #define ARDUPROF_FREERTOS
     #include <ArduProf.h>
 
-switching to MBed RP2040 is shown as below:
+switching to Mbed RP2040 is shown as below:
     // For Pi Pico Mbed
     #define ARDUPROF_MBED
     #include <ArduProf.h>
@@ -224,7 +224,7 @@ Many thanks to the following authors who have developed great audio data and Ard
 - [Arduino Mbed OS RP2040 Boards 4.0.6+](https://github.com/arduino/ArduinoCore-mbed)
 - [Arduino Pico 5.4.1+](https://www.raspberrypi.com/products/raspberry-pi-pico-2/)
 - [DebugLog](https://github.com/hideakitai/DebugLog)
-- [ArduinoJson](https://github.com/bblanchon/ArduinoJson)
+- [ArduinoJson 7](https://github.com/bblanchon/ArduinoJson)
 
 Many thanks for everyone for bug reporting, new feature suggesting, testing and contributing to the development of this project.  
 

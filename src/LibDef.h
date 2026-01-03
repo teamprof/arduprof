@@ -32,8 +32,10 @@
 // v1.4: prepare for zephyr
 // v2.0: support mbed
 // v2.2.0: support pico/pico2 freertos, revise for ArduinoJson v7
+// v2.2.2: allow no queue thread, init thread with priority, and fix minor warnings in Mbed
 #define LIB_MAJOR_VER 2
 #define LIB_MINOR_VER 2
+#define LIB_BUILD_VER 2
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 #define dim(x) (sizeof(x) / sizeof(x[0]))
@@ -55,4 +57,4 @@ static_assert(sizeof(unsigned long) == sizeof(uint32_t), "sizeof(unsigned long) 
 #define STR(x) STR_INDIR(x)
 #endif
 
-#define ARDUPROF_VER STR(LIB_MAJOR_VER) "." STR(LIB_MINOR_VER)
+#define ARDUPROF_VER STR(LIB_MAJOR_VER) "." STR(LIB_MINOR_VER) "." STR(LIB_BUILD_VER)

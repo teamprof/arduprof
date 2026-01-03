@@ -59,6 +59,7 @@
 #elif defined ARDUPROF_MBED
 // #error "RP2040 to be supported on version 2.0.0"
 #include "./os/mbed/thread/ThreadBase.h"
+#include "./peripheral/Gpio.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 #endif

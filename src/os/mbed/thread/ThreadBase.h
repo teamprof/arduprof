@@ -27,7 +27,9 @@ namespace ardumbedos
     class ThreadBase : public MessageBus
     {
     public:
-        ThreadBase(events::EventQueue *queue) : MessageBus(queue)
+        // ThreadBase(events::EventQueue *queue) : MessageBus(queue)
+        ThreadBase(events::EventQueue *queue = nullptr,
+                   osPriority priority = osPriorityNormal) : MessageBus(queue)
         {
         }
 

@@ -34,18 +34,14 @@ static constexpr UBaseType_t uxCoreAffinityMask = ((1 << 0)); // task only run o
 
 #define TASK_NAME "ThreadApp"
 #define TASK_STACK_SIZE (4096 / sizeof(StackType_t))
-#define TASK_PRIORITY 6 // Priority, (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
-#if TASK_PRIORITY > configMAX_PRIORITIES
-#error "TASK_PRIORITY exceeds configMAX_PRIORITIES"
-#endif
+#define TASK_PRIORITY 6   // Priority, (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
 #define TASK_QUEUE_SIZE 8 // message queue size for app task
+static_assert(TASK_PRIORITY <= configMAX_PRIORITIES, "TASK_PRIORITY exceeds configMAX_PRIORITIES");
 
 #define TASK_INIT_NAME "taskDelayInit"
 #define TASK_INIT_STACK_SIZE (4096 / sizeof(StackType_t))
 #define TASK_INIT_PRIORITY 0
-#if TASK_INIT_PRIORITY > configMAX_PRIORITIES
-#error "TASK_INIT_PRIORITY exceeds configMAX_PRIORITIES"
-#endif
+static_assert(TASK_INIT_PRIORITY <= configMAX_PRIORITIES, "TASK_INIT_PRIORITY exceeds configMAX_PRIORITIES");
 
 static uint8_t ucQueueStorageArea[TASK_QUEUE_SIZE * sizeof(Message)];
 static StaticQueue_t xStaticQueue;
@@ -94,18 +90,14 @@ void ThreadApp::start(void *ctx)
 
 #define TASK_NAME "ThreadApp"
 #define TASK_STACK_SIZE (4096 / sizeof(StackType_t))
-#define TASK_PRIORITY 6 // Priority, (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
-#if TASK_PRIORITY > configMAX_PRIORITIES
-#error "TASK_PRIORITY exceeds configMAX_PRIORITIES"
-#endif
+#define TASK_PRIORITY 6   // Priority, (configMAX_PRIORITIES - 1) being the highest, and 0 being the lowest.
 #define TASK_QUEUE_SIZE 8 // message queue size for app task
+static_assert(TASK_PRIORITY <= configMAX_PRIORITIES, "TASK_PRIORITY exceeds configMAX_PRIORITIES");
 
 #define TASK_INIT_NAME "taskDelayInit"
 #define TASK_INIT_STACK_SIZE (4096 / sizeof(StackType_t))
 #define TASK_INIT_PRIORITY 0
-#if TASK_INIT_PRIORITY > configMAX_PRIORITIES
-#error "TASK_INIT_PRIORITY exceeds configMAX_PRIORITIES"
-#endif
+static_assert(TASK_INIT_PRIORITY <= configMAX_PRIORITIES, "TASK_INIT_PRIORITY exceeds configMAX_PRIORITIES");
 
 static uint8_t ucQueueStorageArea[TASK_QUEUE_SIZE * sizeof(Message)];
 static StaticQueue_t xStaticQueue;
@@ -144,7 +136,7 @@ void ThreadApp::start(void *ctx)
 
 #elif defined ARDUPROF_MBED && defined ARDUINO_ARCH_MBED_RP2040
 ////////////////////////////////////////////////////////////////////////////////////////////
-// Thread for MBed RP2040
+// Thread for Mbed RP2040
 ////////////////////////////////////////////////////////////////////////////////////////////
 #define THREAD_QUEUE_SIZE (128 * EVENTS_EVENT_SIZE) // message queue size for app thread
 

@@ -29,11 +29,11 @@ namespace ardumbedos
     class MessageBus : public MessageQueue
     {
     public:
-        MessageBus(events::EventQueue *queue) : _isDone(false), _context(nullptr), MessageQueue(queue)
+        MessageBus(events::EventQueue *queue) : MessageQueue(queue), _context(nullptr), _isDone(false)
         {
         }
 
-        MessageBus(uint16_t queueSize = DefaultQueueSize) : _isDone(false), _context(nullptr), MessageQueue(queueSize)
+        MessageBus(uint16_t queueSize = DefaultQueueSize) : MessageQueue(queueSize), _context(nullptr), _isDone(false)
         {
         }
 
@@ -47,7 +47,11 @@ namespace ardumbedos
         virtual void messageLoop(int ms = -1)
         {
             assert(_queue);
-            _queue->dispatch(ms);
+
+            // modification to replace depreciated api dispatch()
+            std::chrono::milliseconds duration_ms(ms);
+            _queue->dispatch_for(duration_ms);
+            // _queue->dispatch(ms);
         }
 
         virtual void messageLoopForever(void)

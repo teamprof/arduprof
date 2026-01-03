@@ -57,7 +57,7 @@
     [TRACE] ThreadApp.cpp L.199 handlerEventNull : EventNull( 0 ), iParam= 0 , uParam= 0 , lParam= 0
 
 
-  Example of serial log, running on Pi Pico with MBed OS
+  Example of serial log, running on Pi Pico with Mbed OS
     [TRACE] QueueMain.cpp L.104 start : ...
     ===============================================================================
     App Firmware version= 0.1.1

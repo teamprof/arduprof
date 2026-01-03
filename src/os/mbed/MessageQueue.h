@@ -35,15 +35,14 @@ namespace ardumbedos
     public:
         using duration = std::chrono::duration<int, std::milli>;
 
-        MessageQueue(uint16_t queueSize = DefaultQueueSize) : isStaticQueue(false),
-                                                              _queue(new events::EventQueue(queueSize))
+        MessageQueue(uint16_t queueSize = DefaultQueueSize) : _queue(new events::EventQueue(queueSize)),
+                                                              isStaticQueue(false)
         {
         }
 
-        MessageQueue(events::EventQueue *queue) : isStaticQueue(true),
-                                                  _queue(queue)
+        MessageQueue(events::EventQueue *queue) : _queue(queue), isStaticQueue(true)
         {
-            assert(_queue);
+            // assert(_queue);  // remove assert to allow nullptr fior no-queue thread
         }
 
         ~MessageQueue()
