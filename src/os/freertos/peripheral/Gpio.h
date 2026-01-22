@@ -34,7 +34,8 @@ public:
                                        _value(initialValue),
                                        _isIntrEnable(false)
     {
-        if (mode == OUTPUT || mode == OUTPUT_OPENDRAIN)
+        if (mode == OUTPUT)
+        // if (mode == OUTPUT || mode == OUTPUT_OPENDRAIN)
         {
             digitalWrite(_PIN, initialValue);
         }
