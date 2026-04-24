@@ -3,6 +3,9 @@ The ArduProf lib library provides a thin layer framework that makes it easier fo
 version 1.0.0 supports FreeRTOS on ESP32.  
 version 2.0.0 supports Mbed OS on Raspherry Pi Pico (RP2040)
 version 2.2.0 supports FreeRTOS OS on Raspherry Pi Pico/Pico2 (RP2040/RP2350), update for ArduinoJson v7
+version 2.2.2: allow no queue thread, init thread with priority, and fix minor warnings in Mbed
+version 2.2.3: fix for Pico/Pico2 FreeRTOS compile error
+version 2.2.4: remove macro dim(x), use sizeofarray(a) instead
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL_v3-blue.svg)](https://github.com/teamprof/ArduProf/blob/main/LICENSE)
 

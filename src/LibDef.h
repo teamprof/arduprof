@@ -34,12 +34,13 @@
 // v2.2.0: support pico/pico2 freertos, revise for ArduinoJson v7
 // v2.2.2: allow no queue thread, init thread with priority, and fix minor warnings in Mbed
 // v2.2.3: fix for Pico/Pico2 FreeRTOS compile error
+// v2.2.4: remove macro dim(x), use sizeofarray(a) instead
 #define LIB_MAJOR_VER 2
 #define LIB_MINOR_VER 2
-#define LIB_BUILD_VER 3
+#define LIB_BUILD_VER 4
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-#define dim(x) (sizeof(x) / sizeof(x[0]))
+// #define dim(x) (sizeof(x) / sizeof(x[0]))
 #define sizeofarray(a) (sizeof(a) / sizeof(a[0]))
 
 static_assert(sizeof(void *) == sizeof(uint32_t), "sizeof(void *) == sizeof(uint32_t)");
