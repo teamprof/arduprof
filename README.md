@@ -7,6 +7,7 @@ version 2.2.2: allow no queue thread, init thread with priority, and fix minor w
 version 2.2.3: fix for Pico/Pico2 FreeRTOS compile error
 version 2.2.4: remove macro dim(x), use sizeofarray(a) instead
 version 2.3.0: support Zephyr 
+version 2.3.1: add SoftwareTimer and PeriodicTimer for Mbed, and fix minor warnings in Mbed
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL_v3-blue.svg)](https://github.com/teamprof/ArduProf/blob/main/LICENSE)
 
