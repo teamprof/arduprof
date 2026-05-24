@@ -56,6 +56,15 @@ namespace zephyros
                 // LOG_INF("Failed to post event to app task event queue");
             }
         }
+        
+        inline void postEvent(MessageQueue *msgQueue, int16_t event, int16_t iParam = 0, uint16_t uParam = 0, uint32_t lParam = 0L, k_timeout_t timeout = K_NO_WAIT)
+        {
+            if (!msgQueue || !msgQueue->queue())
+            {
+                return;
+            }            
+            postEvent(msgQueue->queue(), event, iParam, uParam, lParam, timeout);
+        }
 
         inline void postEvent(int16_t event, int16_t iParam = 0, uint16_t uParam = 0, uint32_t lParam = 0L, k_timeout_t timeout = K_NO_WAIT)
         {
