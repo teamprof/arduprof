@@ -56,9 +56,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 // For Zephyr
 #elif defined ARDUPROF_ZEPHYR
-#include "./os/zephyr/MessageQueue.h"
-#include "./os/zephyr/MessageBus.h"
+// #include "./os/zephyr/MessageQueue.h"
+// #include "./os/zephyr/MessageBus.h"
 #include "./os/zephyr/thread/ThreadBase.h"
+#include "./os/zephyr/peripheral/SoftwareTimer.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // For MBED

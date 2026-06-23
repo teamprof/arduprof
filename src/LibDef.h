@@ -35,12 +35,13 @@
 // v2.2.2: allow no queue thread, init thread with priority, and fix minor warnings in Mbed
 // v2.2.3: fix for Pico/Pico2 FreeRTOS compile error
 // v2.2.4: remove macro dim(x), use sizeofarray(a) instead
-// v2.3.0: support Zephyr 
+// v2.3.0: support Zephyr
 // v2.3.1: add SoftwareTimer and PeriodicTimer for Mbed, and fix minor warnings in Mbed
 // v2.3.2: add postEvent() with ThreadBase/MessageQueue pointer for Zephyr
+// v2.4.0: add SoftwareTimer for Zephyr
 #define LIB_MAJOR_VER 2
-#define LIB_MINOR_VER 3
-#define LIB_BUILD_VER 2
+#define LIB_MINOR_VER 4
+#define LIB_BUILD_VER 0
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 // #define dim(x) (sizeof(x) / sizeof(x[0]))
