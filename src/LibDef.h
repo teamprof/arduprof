@@ -27,21 +27,25 @@
 #endif
 
 ////////////////////////////////////////////////////////////////////////////////////////////
-// v1.0: first release
-// v1.2: add namespace freertos
-// v1.3: support esp-idf toolchain
-// v1.4: prepare for zephyr
-// v2.0: support mbed
-// v2.2.0: support pico/pico2 freertos, revise for ArduinoJson v7
-// v2.2.2: allow no queue thread, init thread with priority, and fix minor
-// warnings in Mbed v2.2.3: fix for Pico/Pico2 FreeRTOS compile error v2.2.4:
-// remove macro dim(x), use sizeofarray(a) instead v2.3.0: support Zephyr
-// v2.3.1: add SoftwareTimer and PeriodicTimer for Mbed, and fix minor warnings
-// in Mbed v2.3.2: add postEvent() with ThreadBase/MessageQueue pointer for
-// Zephyr v2.4.0: add SoftwareTimer for Zephyr v2.4.1: support ESP32C6
+/*
+v1.0: first release
+v1.2: add namespace freertos
+v1.3: support esp-idf toolchain
+v1.4: prepare for zephyr
+v2.0: support mbed
+v2.2.0: support pico/pico2 freertos, revise for ArduinoJson v7
+v2.2.2: support no queue thread, init with priority, fix minor warnings in Mbed
+v2.2.3: fix for Pico/Pico2 FreeRTOS compile error
+v2.2.4: remove macro dim(x), use sizeofarray(a) instead
+v2.3.0: support Zephyr
+v2.3.1: add SoftwareTimer and PeriodicTimer and fix minor warnings in Mbed
+v2.3.2: add postEvent() with ThreadBase/MessageQueue pointer for Zephyr
+v2.4.0: add SoftwareTimer for Zephyr
+v2.4.1: support ESP32C6
+*/
 #define LIB_MAJOR_VER 2
 #define LIB_MINOR_VER 4
-#define LIB_BUILD_VER 0
+#define LIB_BUILD_VER 1
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 // #define dim(x) (sizeof(x) / sizeof(x[0]))
