@@ -1,21 +1,22 @@
 /* Copyright 2026 teamprof.net@gmail.com
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this
- * software and associated documentation files (the "Software"), to deal in the Software
- * without restriction, including without limitation the rights to use, copy, modify,
- * merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to the following
- * conditions:
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
  *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
  *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
- * INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
- * PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- * HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
- * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
- * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 #pragma once
 
@@ -32,13 +33,12 @@
 // v1.4: prepare for zephyr
 // v2.0: support mbed
 // v2.2.0: support pico/pico2 freertos, revise for ArduinoJson v7
-// v2.2.2: allow no queue thread, init thread with priority, and fix minor warnings in Mbed
-// v2.2.3: fix for Pico/Pico2 FreeRTOS compile error
-// v2.2.4: remove macro dim(x), use sizeofarray(a) instead
-// v2.3.0: support Zephyr
-// v2.3.1: add SoftwareTimer and PeriodicTimer for Mbed, and fix minor warnings in Mbed
-// v2.3.2: add postEvent() with ThreadBase/MessageQueue pointer for Zephyr
-// v2.4.0: add SoftwareTimer for Zephyr
+// v2.2.2: allow no queue thread, init thread with priority, and fix minor
+// warnings in Mbed v2.2.3: fix for Pico/Pico2 FreeRTOS compile error v2.2.4:
+// remove macro dim(x), use sizeofarray(a) instead v2.3.0: support Zephyr
+// v2.3.1: add SoftwareTimer and PeriodicTimer for Mbed, and fix minor warnings
+// in Mbed v2.3.2: add postEvent() with ThreadBase/MessageQueue pointer for
+// Zephyr v2.4.0: add SoftwareTimer for Zephyr v2.4.1: support ESP32C6
 #define LIB_MAJOR_VER 2
 #define LIB_MINOR_VER 4
 #define LIB_BUILD_VER 0
@@ -47,8 +47,10 @@
 // #define dim(x) (sizeof(x) / sizeof(x[0]))
 #define sizeofarray(a) (sizeof(a) / sizeof(a[0]))
 
-static_assert(sizeof(void *) == sizeof(uint32_t), "sizeof(void *) == sizeof(uint32_t)");
-static_assert(sizeof(unsigned long) == sizeof(uint32_t), "sizeof(unsigned long) == sizeof(uint32_t)");
+static_assert(sizeof(void *) == sizeof(uint32_t),
+              "sizeof(void *) == sizeof(uint32_t)");
+static_assert(sizeof(unsigned long) == sizeof(uint32_t),
+              "sizeof(unsigned long) == sizeof(uint32_t)");
 
 #ifndef UNUSED
 #define UNUSED(x) ((void)(x))
@@ -63,4 +65,5 @@ static_assert(sizeof(unsigned long) == sizeof(uint32_t), "sizeof(unsigned long) 
 #define STR(x) STR_INDIR(x)
 #endif
 
-#define ARDUPROF_VER STR(LIB_MAJOR_VER) "." STR(LIB_MINOR_VER) "." STR(LIB_BUILD_VER)
+#define ARDUPROF_VER                                                           \
+  STR(LIB_MAJOR_VER) "." STR(LIB_MINOR_VER) "." STR(LIB_BUILD_VER)
