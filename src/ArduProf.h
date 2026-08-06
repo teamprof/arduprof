@@ -28,7 +28,7 @@
 #if !defined ARDUPROF_MBED && !defined ARDUPROF_FREERTOS
 #if defined ARDUINO_ARCH_ESP32
 #define ARDUPROF_FREERTOS
-#elif ARDUINO_ARCH_MBED_RP2040
+#elif defined ARDUINO_ARCH_MBED_RP2040
 #define ARDUPROF_MBED
 #endif
 #endif
@@ -70,6 +70,13 @@
 #include "./os/mbed/peripheral/Gpio.h"
 #include "./os/mbed/peripheral/PeriodicTimer.h"
 #include "./os/mbed/thread/ThreadBase.h"
+
+///////////////////////////////////////////////////////////////////////////////
+// For NuttX
+#elif defined ARDUPROF_NUTTX
+#include "./os/nuttx/thread/ThreadBase.h"
+// #include "./os/nuttx/peripheral/Gpio.h"
+#include "./os/nuttx/peripheral/PeriodicTimer.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 #endif

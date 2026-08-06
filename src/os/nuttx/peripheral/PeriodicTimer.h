@@ -1,4 +1,4 @@
-/* Copyright 2024 teamprof.net@gmail.com
+/* Copyright 2026 teamprof.net@gmail.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this
  * software and associated documentation files (the "Software"), to deal in the Software
@@ -19,26 +19,23 @@
  */
 #pragma once
 
-#ifdef ARDUINO
-///////////////////////////////////////////////////////////////////////////////
-// Arduino
-///////////////////////////////////////////////////////////////////////////////
-// Disable Logging Macro (Release Mode)
-// #define DEBUGLOG_DISABLE_LOG
-// You can also set default log level by defining macro (default: INFO)
-#define DEBUGLOG_DEFAULT_LOG_LEVEL_TRACE
-// #include "../../DebugLog/DebugLog.h" // https://github.com/hideakitai/DebugLog
-#include <DebugLog.h> // https://github.com/hideakitai/DebugLog
+#if defined ARDUPROF_NUTTX
 
-#define DefaultLogLevel (DebugLogLevel::LVL_TRACE)
+// #include <stdint.h>
+#include "./SoftwareTimer.h"
 
-#elif defined ESP_PLATFORM
-///////////////////////////////////////////////////////////////////////////////
-// ESP32/ESP32S3/ESP32C3
-///////////////////////////////////////////////////////////////////////////////
-#undef LOG_LOCAL_LEVEL
-#define LOG_LOCAL_LEVEL ESP_LOG_VERBOSE
-#include <esp_log.h>
+namespace nuttxos
+{
+    class PeriodicTimer : public SoftwareTimer
+    {
+    public:
+        PeriodicTimer(const struct itimerspec &its, Callback callback) : SoftwareTimer(its, callback)
+        {
+        }
 
-///////////////////////////////////////////////////////////////////////////////
-#endif
+    private:
+    };
+
+} // namespace nuttxos
+
+#endif // ARDUPROF_NUTTX

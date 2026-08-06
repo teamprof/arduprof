@@ -12,6 +12,7 @@ version 2.3.1: add SoftwareTimer and PeriodicTimer for Mbed, and fix minor warni
 version 2.3.2: add postEvent() with ThreadBase/MessageQueue pointer for Zephyr
 version 2.4.0: add SoftwareTimer for Zephyr
 version 2.4.1: support ESP32C6
+version 2.5.0: support NuttX OS
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL_v3-blue.svg)](https://github.com/teamprof/ArduProf/blob/main/LICENSE)
 
@@ -23,6 +24,7 @@ version 2.4.1: support ESP32C6
 
 The following boards are supported by this project:
 
+- [FireBeetle 2 ESP32-C6 IoT Development Board](https://bit.ly/452Ueoq)
 - [ESP32-DevKitC V1](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/hw-reference/esp32/get-started-devkitc.html)
 - [ESP32-S3-DevKitC-1 v1.1](https://docs.espressif.com/projects/esp-idf/en/latest/esp32s3/hw-reference/esp32s3/user-guide-devkitc-1.html)
 - [ESP32C3-CORE](https://wiki.luatos.com/chips/esp32c3/board.html)
@@ -58,6 +60,17 @@ The following boards are supported by this project:
 
 ---
 
+## Build demo code (basic example for ESP32C6)
+
+- launch the Arduino IDE
+- create a new project of example "basic" by clicking Menu -> "File" -> "Examples" -> "ArduProf" -> "basic"  
+  [![New example - basic](./doc/image/example-basic-new.png)](https://github.com/teamprof/ArduProf/blob/main/doc/image/example-basic-new.png)
+- select DFRobot Fire Beetle 2 ESP32-C6 by clicking Menu -> “Tools” -> “Select Board” -> "DFRobot Fire Beetle 2 ESP32-C6"
+- Enable USB CDC On Boot by clicking Menu -> "Tools" -> "USB CDC On Boot" -> "Enabled"
+- build the code by clicking Menu -> “Sketch” -> “Compile/Verify”  
+  If everything goes smoothly, you should see the following screen.
+  [![example-basic-build](./doc/image/example-basic-build.png)](https://github.com/teamprof/ArduProf/blob/main/doc/image/example-basic-build.png)
+
 ## Build demo code (basic example for ESP32C3)
 
 - launch the Arduino IDE
@@ -68,7 +81,7 @@ The following boards are supported by this project:
   [![Config example - basic](./doc/image/example-basic-esp32c3-settings.png)](https://github.com/teamprof/ArduProf/blob/main/doc/image/example-basic-esp32c3-settings.png)
 - build the code by clicking Menu -> “Sketch” -> “Compile/Verify”  
   If everything goes smoothly, you should see the following screen.
-  [![example-basic-build](./doc/image/example-basic-build.png)](https://github.com/teamprof/ArduProf/blob/main/doc/image/example-basic-build.png)
+  [![example-basic-build](./doc/image/example-basic-build-esp32c6.png)](https://github.com/teamprof/ArduProf/blob/main/doc/image/example-basic-build-esp32c6.png)
 
 ## Flash and run demo code (basic example for ESP32C3)
 

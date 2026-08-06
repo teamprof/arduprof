@@ -20,7 +20,7 @@
  */
 #pragma once
 
-#if defined ARDUINO
+#ifdef ARDUINO
 #include <Arduino.h>
 #else
 #include <stdint.h>
@@ -42,19 +42,18 @@ v2.3.1: add SoftwareTimer and PeriodicTimer and fix minor warnings in Mbed
 v2.3.2: add postEvent() with ThreadBase/MessageQueue pointer for Zephyr
 v2.4.0: add SoftwareTimer for Zephyr
 v2.4.1: support ESP32C6
+v2.5.0: support NuttX OS
 */
 #define LIB_MAJOR_VER 2
-#define LIB_MINOR_VER 4
-#define LIB_BUILD_VER 1
+#define LIB_MINOR_VER 5
+#define LIB_BUILD_VER 0
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 // #define dim(x) (sizeof(x) / sizeof(x[0]))
 #define sizeofarray(a) (sizeof(a) / sizeof(a[0]))
 
-static_assert(sizeof(void *) == sizeof(uint32_t),
-              "sizeof(void *) == sizeof(uint32_t)");
-static_assert(sizeof(unsigned long) == sizeof(uint32_t),
-              "sizeof(unsigned long) == sizeof(uint32_t)");
+static_assert(sizeof(void *) == sizeof(uint32_t), "sizeof(void *) == sizeof(uint32_t)");
+static_assert(sizeof(unsigned long) == sizeof(uint32_t), "sizeof(unsigned long) == sizeof(uint32_t)");
 
 #ifndef UNUSED
 #define UNUSED(x) ((void)(x))
@@ -71,3 +70,9 @@ static_assert(sizeof(unsigned long) == sizeof(uint32_t),
 
 #define ARDUPROF_VER                                                           \
   STR(LIB_MAJOR_VER) "." STR(LIB_MINOR_VER) "." STR(LIB_BUILD_VER)
+
+
+#ifndef CONCAT
+#define _STR_CONCAT_HELPER(a, b) a b
+#define STR_CONCAT(a, b) _STR_CONCAT_HELPER(a, b)
+#endif
