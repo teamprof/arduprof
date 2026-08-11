@@ -26,7 +26,7 @@
 #include <errno.h>
 #include <syslog.h>
 // #include <nuttx/mqueue.h>
-#include <nuttx/spinlock.h>
+// #include <nuttx/spinlock.h>
 #include <nuttx/semaphore.h>
 #include <nuttx/mm/gran.h>
 
@@ -77,7 +77,8 @@ namespace nuttxos
         MessageQueue(uint8_t *queueBuffer, 
                      size_t bufferSize,
                      void **queuePointers,
-                     size_t lengthPointers) : _lock_pool(SP_UNLOCKED),
+                     size_t lengthPointers) : _mutex_pool(PTHREAD_MUTEX_INITIALIZER),
+                                              // _lock_pool(SP_UNLOCKED),
                                               _queue_pointers(queuePointers), 
                                               _length_pointers(lengthPointers), 
                                               _queue_head(0), 
@@ -141,7 +142,8 @@ namespace nuttxos
             }
             memcpy(ptr, &msg, sizeof(msg));
 
-            irqstate_t flags = spin_lock_irqsave(&_lock_pool);
+            pthread_mutex_lock(&_mutex_pool);
+            // irqstate_t flags = spin_lock_irqsave(&_lock_pool);
             int next_head = (_queue_head + 1) % _length_pointers;
             // int queue_tail = _queue_tail;
             if (next_head != _queue_tail) // Ensure FIFO isn't full
@@ -149,8 +151,8 @@ namespace nuttxos
                 _queue_pointers[_queue_head] = ptr;
                 _queue_head = next_head;
 
-                // Release spinlock BEFORE signaling semaphore 
-                spin_unlock_irqrestore(&_lock_pool, flags);
+                pthread_mutex_unlock(&_mutex_pool);
+                // spin_unlock_irqrestore(&_lock_pool, flags); // Release spinlock BEFORE signaling semaphore 
 
                 // Signal Consumer Thread (nxsem_post is safe in ISRs & threads) 
                 nxsem_post(&_sem_queue);
@@ -159,7 +161,8 @@ namespace nuttxos
             {
                 // FIFO full! Release spinlock first, then free the allocated memory.
                 // gran_free() is also internally thread-safe with CONFIG_GRAN_INTR=y.
-                spin_unlock_irqrestore(&_lock_pool, flags);
+                pthread_mutex_unlock(&_mutex_pool);
+                // spin_unlock_irqrestore(&_lock_pool, flags);
                 gran_free(msg_pool, ptr, SIZEOF_MESSAGE_POW2);
             }
             
@@ -251,7 +254,8 @@ namespace nuttxos
 
     protected:
         sem_t _sem_queue;
-        spinlock_t _lock_pool;
+        pthread_mutex_t _mutex_pool;
+        // spinlock_t _lock_pool;
         void *_msg_pool;
         void **_queue_pointers;
         const size_t _length_pointers;

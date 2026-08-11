@@ -36,20 +36,21 @@ namespace nuttxos
                    uint8_t *queueBuffer, 
                    size_t bufferSize,
                    void **queuePointers,
-                   size_t lengthPointer) : MessageBus(queueBuffer, bufferSize, queuePointers, lengthPointer)
+                   size_t lengthPointer) : MessageBus(queueBuffer, bufferSize, queuePointers, lengthPointer),
+                                           _core(core)
         // ThreadBase(int core, size_t taskStackSize, int priority,
         //            const char *queueName, long queueLength) : MessageBus(queueName, queueLength)
         {
-#ifdef CONFIG_SMP
-            CPU_ZERO(&_cpuset);
-            if (core < 0 || core >= CONFIG_SMP_NCPUS)
-            {
-                // lowsyslog( "invalid param core = %d\n", core);
-                syslog(LOG_ERR, "ThreadBase: invalid param core = %d\n", core);
-                return;
-            }
-            CPU_SET(core, &_cpuset);
-#endif
+// #ifdef CONFIG_SMP
+//             CPU_ZERO(&_cpuset);
+//             if (core < 0 || core >= CONFIG_SMP_NCPUS)
+//             {
+//                 // lowsyslog( "invalid param core = %d\n", core);
+//                 syslog(LOG_ERR, "ThreadBase: invalid param core = %d\n", core);
+//                 return;
+//             }
+//             CPU_SET(core, &_cpuset);
+// #endif
 
             auto err = pthread_attr_init(&_attr);
             if (err != OK)
@@ -119,12 +120,19 @@ namespace nuttxos
             }
 
 #ifdef CONFIG_SMP
-            err = pthread_setaffinity_np(_thread, sizeof(cpu_set_t), &_cpuset);
-            if (err != OK)
+            if (_core >= 0 || _core < CONFIG_SMP_NCPUS)
             {
-                // lowsyslog( "pthread_setaffinity_np() returns %d\n", err);
-                syslog(LOG_ERR, "ThreadBase: pthread_setaffinity_np() returns %d\n", err);
-                return;
+                cpu_set_t cpuset;
+                CPU_ZERO(&cpuset);
+                CPU_SET(_core, &cpuset);
+
+                err = pthread_setaffinity_np(_thread, sizeof(cpu_set_t), &cpuset);
+                if (err != OK)
+                {
+                    // lowsyslog( "pthread_setaffinity_np() returns %d\n", err);
+                    syslog(LOG_ERR, "ThreadBase: pthread_setaffinity_np() returns %d\n", err);
+                    return;
+                }
             }
 #endif
 
@@ -151,7 +159,8 @@ namespace nuttxos
         struct sched_param _param;
 
 #ifdef CONFIG_SMP
-        cpu_set_t _cpuset;
+        int _core;
+        // cpu_set_t _cpuset;
 #endif
     };
 } // namespace nuttxos

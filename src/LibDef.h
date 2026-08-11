@@ -43,10 +43,11 @@ v2.3.2: add postEvent() with ThreadBase/MessageQueue pointer for Zephyr
 v2.4.0: add SoftwareTimer for Zephyr
 v2.4.1: support ESP32C6
 v2.5.0: support NuttX OS
+v2.5.1: replace spinlock by semaphore for NuttX, add option of OS assigned running core
 */
 #define LIB_MAJOR_VER 2
 #define LIB_MINOR_VER 5
-#define LIB_BUILD_VER 0
+#define LIB_BUILD_VER 1
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 // #define dim(x) (sizeof(x) / sizeof(x[0]))

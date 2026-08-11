@@ -74,14 +74,16 @@ namespace nuttxos
             }
 
             Message *ptr = NULL;
-            irqstate_t flags = spin_lock_irqsave(&_lock_pool);
+            pthread_mutex_lock(&_mutex_pool);
+            // irqstate_t flags = spin_lock_irqsave(&_lock_pool);
             if (_queue_tail != _queue_head) 
             {
                 ptr = (Message *)_queue_pointers[_queue_tail];
                 _queue_tail = (_queue_tail + 1) % _length_pointers;
             }
             // int queue_head = _queue_head, queue_tail = _queue_tail;
-            spin_unlock_irqrestore(&_lock_pool, flags);
+            pthread_mutex_unlock(&_mutex_pool);
+            // spin_unlock_irqrestore(&_lock_pool, flags);
 
             // syslog(LOG_DEBUG, "MessageBus: messageLoop: _queue_head=%d, _queue_tail=%d\n", queue_head, queue_tail);
 
