@@ -44,6 +44,7 @@ v2.4.0: add SoftwareTimer for Zephyr
 v2.4.1: support ESP32C6
 v2.5.0: support NuttX OS
 v2.5.1: replace spinlock by semaphore for NuttX, add option of OS assigned running core
+v2.5.2: minor fix on single core ThreadBase for NuttX
 */
 #define LIB_MAJOR_VER 2
 #define LIB_MINOR_VER 5

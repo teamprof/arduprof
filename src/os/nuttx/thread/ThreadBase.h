@@ -36,11 +36,15 @@ namespace nuttxos
                    uint8_t *queueBuffer, 
                    size_t bufferSize,
                    void **queuePointers,
-                   size_t lengthPointer) : MessageBus(queueBuffer, bufferSize, queuePointers, lengthPointer),
-                                           _core(core)
+                   size_t lengthPointer) : MessageBus(queueBuffer, bufferSize, queuePointers, lengthPointer)
         // ThreadBase(int core, size_t taskStackSize, int priority,
         //            const char *queueName, long queueLength) : MessageBus(queueName, queueLength)
         {
+#ifdef CONFIG_SMP
+            _core = core;
+#else
+            UNUSED(core);
+#endif
 // #ifdef CONFIG_SMP
 //             CPU_ZERO(&_cpuset);
 //             if (core < 0 || core >= CONFIG_SMP_NCPUS)

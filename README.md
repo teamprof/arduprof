@@ -14,6 +14,7 @@ version 2.4.0: add SoftwareTimer for Zephyr
 version 2.4.1: support ESP32C6
 version 2.5.0: support NuttX OS
 version 2.5.1: replace spinlock by semaphore for NuttX, add option of OS assigned running core
+version 2.5.2: minor fix on single core ThreadBase for NuttX
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL_v3-blue.svg)](https://github.com/teamprof/ArduProf/blob/main/LICENSE)
 
