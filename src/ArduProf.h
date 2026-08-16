@@ -55,6 +55,7 @@
 #include "./os/freertos/peripheral/PeriodicTimer.h"
 #include "./os/freertos/peripheral/SoftwareTimer.h"
 #include "./os/freertos/thread/ThreadBase.h"
+#include "./os/freertos/thread/ThreadPool.h"
 
 ///////////////////////////////////////////////////////////////////////////////
 // For Zephyr
