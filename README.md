@@ -16,6 +16,7 @@ version 2.5.0: support NuttX OS
 version 2.5.1: replace spinlock by semaphore for NuttX, add option of OS assigned running core
 version 2.5.2: minor fix on single core ThreadBase for NuttX
 version 2.5.3: add ThreadPool for ESP32
+version 2.5.4:support no queue thread on ESP32 with FreeRTOS
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL_v3-blue.svg)](https://github.com/teamprof/ArduProf/blob/main/LICENSE)
 

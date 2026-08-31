@@ -45,13 +45,19 @@ namespace ardufreertos
             {
                 _isStaticQueue = true;
                 _queue = xQueueCreateStatic(queueLength, sizeof(Message), pucQueueStorageBuffer, pxQueueBuffer);
+                configASSERT(_queue != NULL);
+            }
+            else if(queueLength > 0)
+            {
+                _isStaticQueue = false;
+                _queue = xQueueCreate(queueLength, sizeof(Message));
+                configASSERT(_queue != NULL);
             }
             else
             {
                 _isStaticQueue = false;
-                _queue = xQueueCreate(queueLength, sizeof(Message));
-            }
-            configASSERT(_queue != NULL);
+                _queue = nullptr;
+            }            
         }
 
         ~MessageQueue()

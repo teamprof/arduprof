@@ -36,15 +36,15 @@ namespace ardufreertos
                                                              _taskHandle(nullptr)
 
         {
-            if (pucQueueStorageBuffer != nullptr && pxQueueBuffer != nullptr)
-            {
-                _queue = xQueueCreateStatic(queueLength, sizeof(Message), pucQueueStorageBuffer, pxQueueBuffer);
-            }
-            else
-            {
-                _queue = xQueueCreate(queueLength, sizeof(Message));
-            }
-            configASSERT(_queue != NULL);
+            // if (pucQueueStorageBuffer != nullptr && pxQueueBuffer != nullptr)
+            // {
+            //     _queue = xQueueCreateStatic(queueLength, sizeof(Message), pucQueueStorageBuffer, pxQueueBuffer);
+            // }
+            // else
+            // {
+            //     _queue = xQueueCreate(queueLength, sizeof(Message));
+            // }
+            // configASSERT(_queue != NULL);
         };
 
         virtual void start(void *ctx)

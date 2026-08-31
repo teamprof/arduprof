@@ -46,10 +46,11 @@ v2.5.0: support NuttX OS
 v2.5.1: replace spinlock by semaphore for NuttX, add option of OS assigned running core
 v2.5.2: minor fix on single core ThreadBase for NuttX
 v2.5.3:	add ThreadPool for ESP32
+v2.5.4:	support no queue thread on ESP32 with FreeRTOS
 */
 #define LIB_MAJOR_VER 2
 #define LIB_MINOR_VER 5
-#define LIB_BUILD_VER 3
+#define LIB_BUILD_VER 4
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 // #define dim(x) (sizeof(x) / sizeof(x[0]))
