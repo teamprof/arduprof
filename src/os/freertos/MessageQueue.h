@@ -96,7 +96,7 @@ namespace ardufreertos
                     }
                     portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
                 }
-#elif defined ARDUINO_ARCH_ESP32
+#elif defined(ESP_PLATFORM)
                 if (xPortInIsrContext())
                 {
                     BaseType_t xHigherPriorityTaskWoken = pdFALSE;

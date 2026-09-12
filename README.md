@@ -17,6 +17,7 @@ version 2.5.1: replace spinlock by semaphore for NuttX, add option of OS assigne
 version 2.5.2: minor fix on single core ThreadBase for NuttX
 version 2.5.3: add ThreadPool for ESP32
 version 2.5.4:support no queue thread on ESP32 with FreeRTOS
+version 2.5.5:support esp-idf
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL_v3-blue.svg)](https://github.com/teamprof/ArduProf/blob/main/LICENSE)
 
@@ -240,6 +241,9 @@ Example of src/LibLog.h
 #define DEBUGLOG_DEFAULT_LOG_LEVEL_TRACE // for debug version
 #include <DebugLog.h>                    // https://github.com/hideakitai/DebugLog
 ```
+
+### Please refer to https://github.com/teamprof/arduprof-template for more example code 
+
 
 ---
 

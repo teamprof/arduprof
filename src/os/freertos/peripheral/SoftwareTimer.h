@@ -40,17 +40,23 @@ namespace ardufreertos
                       void *const pvTimerID,
                       TimerCallbackFunction_t pxCallbackFunction)
         {
+            assert(xTimerPeriodInTicks);
+            
             hTimer = xTimerCreate(pcTimerName,
                                   xTimerPeriodInTicks,
                                   uxAutoReload, // auto-reload when expire.
                                   pvTimerID,
                                   pxCallbackFunction);
+            assert(hTimer);
         }
 
         ~SoftwareTimer()
         {
-            xTimerDelete(hTimer, 0);
-            hTimer = nullptr;
+            if(hTimer) 
+            {
+                xTimerDelete(hTimer, 0);
+                hTimer = nullptr;
+            }
         }
 
         void start(void)

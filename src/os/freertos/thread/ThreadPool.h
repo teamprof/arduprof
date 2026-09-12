@@ -20,7 +20,10 @@
  */
 #pragma once
 
+#ifdef ARDUINO
 #include <Arduino.h>
+#endif
+
 #include <functional>
 #include <vector>
 
@@ -60,7 +63,9 @@ public:
       //     &handle           // Task handle
       // );
       if (rst != pdTRUE) {
+#ifdef ARDUINO
         LOG_WARN("xTaskCreatePinnedToCore() of worker ", i, "failed");
+#endif        
       }
       workers.push_back(handle);
     }

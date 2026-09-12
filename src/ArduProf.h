@@ -37,7 +37,7 @@
 // For FreeRTOS
 #if defined ARDUPROF_FREERTOS
 
-#if defined ARDUINO_ARCH_ESP32
+#if defined ESP_PLATFORM
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
 #include "freertos/task.h"
