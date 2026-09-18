@@ -48,10 +48,11 @@ v2.5.2: minor fix on single core ThreadBase for NuttX
 v2.5.3:	add ThreadPool for ESP32
 v2.5.4:	support no queue thread on ESP32 with FreeRTOS
 v2.5.5: support esp-idf
+v2.5.6: complete Gpio for esp-idf
 */
 #define LIB_MAJOR_VER 2
 #define LIB_MINOR_VER 5
-#define LIB_BUILD_VER 5
+#define LIB_BUILD_VER 6
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 // #define dim(x) (sizeof(x) / sizeof(x[0]))
@@ -80,4 +81,13 @@ static_assert(sizeof(unsigned long) == sizeof(uint32_t), "sizeof(unsigned long) 
 #ifndef CONCAT
 #define _STR_CONCAT_HELPER(a, b) a b
 #define STR_CONCAT(a, b) _STR_CONCAT_HELPER(a, b)
+#endif
+
+
+#ifndef HIGH
+#define HIGH 1
+#endif
+
+#ifndef LOW
+#define LOW 0
 #endif

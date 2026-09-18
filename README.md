@@ -1,9 +1,9 @@
 ## ArduProf framework
 
 The ArduProf lib library provides a thin layer framework that makes it easier for developers to code inter-thread communication by an event driven method.  
-version 1.0.0 supports FreeRTOS on ESP32.  
-version 2.0.0 supports Mbed OS on Raspherry Pi Pico (RP2040)
-version 2.2.0 supports FreeRTOS OS on Raspherry Pi Pico/Pico2 (RP2040/RP2350), update for ArduinoJson v7
+version 1.0.0: supports FreeRTOS on ESP32.  
+version 2.0.0: supports Mbed OS on Raspherry Pi Pico (RP2040)
+version 2.2.0: supports FreeRTOS OS on Raspherry Pi Pico/Pico2 (RP2040/RP2350), update for ArduinoJson v7
 version 2.2.2: allow no queue thread, init thread with priority, and fix minor warnings in Mbed
 version 2.2.3: fix for Pico/Pico2 FreeRTOS compile error
 version 2.2.4: remove macro dim(x), use sizeofarray(a) instead
@@ -16,8 +16,9 @@ version 2.5.0: support NuttX OS
 version 2.5.1: replace spinlock by semaphore for NuttX, add option of OS assigned running core
 version 2.5.2: minor fix on single core ThreadBase for NuttX
 version 2.5.3: add ThreadPool for ESP32
-version 2.5.4:support no queue thread on ESP32 with FreeRTOS
-version 2.5.5:support esp-idf
+version 2.5.4: support no queue thread on ESP32 with FreeRTOS
+version 2.5.5: support esp-idf
+version 2.5.6: complete Gpio for esp-idf
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL_v3-blue.svg)](https://github.com/teamprof/ArduProf/blob/main/LICENSE)
 
