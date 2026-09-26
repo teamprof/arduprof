@@ -19,6 +19,7 @@ version 2.5.3: add ThreadPool for ESP32
 version 2.5.4: support no queue thread on ESP32 with FreeRTOS
 version 2.5.5: support esp-idf
 version 2.5.6: complete Gpio for esp-idf
+version 2.6.0: support Pico C SDK  
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL_v3-blue.svg)](https://github.com/teamprof/ArduProf/blob/main/LICENSE)
 

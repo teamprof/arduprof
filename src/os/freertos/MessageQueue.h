@@ -85,7 +85,7 @@ namespace ardufreertos
         {
             if (msgQueue && msgQueue->_queue)
             {
-#if defined ARDUINO_ARCH_RP2040
+#if defined ARDUINO_ARCH_RP2040 || defined ARDUPROF_PICO_C
                 if (portCHECK_IF_IN_ISR())
                 // if (xPortIsInsideInterrupt())
                 {
@@ -166,7 +166,7 @@ namespace ardufreertos
             };
             BaseType_t xHigherPriorityTaskWoken = pdFALSE;
             xQueueSendFromISR(_queue, &msg, &xHigherPriorityTaskWoken);
-#if defined ARDUINO_ARCH_RP2040
+#if defined ARDUINO_ARCH_RP2040 || defined ARDUPROF_PICO_C
             portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 #elif defined ARDUINO_ARCH_ESP32
             portYIELD_FROM_ISR();

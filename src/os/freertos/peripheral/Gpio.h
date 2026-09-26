@@ -188,6 +188,89 @@ protected:
     bool _isIntrEnable;
 };
 
+#elif defined ARDUPROF_PICO_C
+///////////////////////////////////////////////////////////////////////////////
+// Pico C SDK for RP2040
+///////////////////////////////////////////////////////////////////////////////
+#include <hardware/gpio.h>
+
+class Gpio
+{
+public:
+    Gpio(uint8_t pin,
+         uint8_t mode = GPIO_IN,
+         uint8_t initialValue = LOW) : _PIN(pin),
+                                       _ioMode(mode),
+                                       _value(initialValue),
+                                       _isIntrEnable(false)
+    {
+        gpio_init(_PIN);
+        pinMode(mode);
+    }
+
+    ~Gpio()
+    {
+        gpio_deinit(_PIN);
+    }
+
+    void pinMode(uint8_t ioMode)
+    {
+        _ioMode = ioMode;
+        gpio_set_dir(_PIN, ioMode);
+    }
+
+    int read(void)
+    {
+        return gpio_get(_PIN);
+    }
+
+    void write(uint8_t value)
+    {
+        _value = value;
+        gpio_put(_PIN, value);
+    }
+
+    // void attachIntr(uint8_t intrMode, void (*isr)(void))
+    // {
+    //     if (!_isIntrEnable)
+    //     {
+    //         attachInterrupt(digitalPinToInterrupt(_PIN), isr, intrMode);
+    //         _isIntrEnable = true;
+    //     }
+    // }
+
+    // void attachIntr(uint8_t intrMode, void (*isr)(void *), void *arg)
+    // {
+    //     if (!_isIntrEnable)
+    //     {
+    //         attachInterruptArg(digitalPinToInterrupt(_PIN), isr, arg, intrMode);
+    //         _isIntrEnable = true;
+    //     }
+    // }
+
+    // void detachIntr(void)
+    // {
+    //     if (_isIntrEnable)
+    //     {
+    //         detachInterrupt(digitalPinToInterrupt(_PIN));
+    //         _isIntrEnable = false;
+    //     }
+    // }
+
+    uint8_t getPin(void)
+    {
+        return _PIN;
+    }
+
+protected:
+    const uint8_t _PIN;
+    uint8_t _ioMode;
+    uint8_t _value;
+
+    bool _isIntrEnable;
+};
+
+
 #elif defined ESP_PLATFORM
 ///////////////////////////////////////////////////////////////////////////////
 // ESP32

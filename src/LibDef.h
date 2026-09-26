@@ -49,10 +49,11 @@ v2.5.3:	add ThreadPool for ESP32
 v2.5.4:	support no queue thread on ESP32 with FreeRTOS
 v2.5.5: support esp-idf
 v2.5.6: complete Gpio for esp-idf
+v2.6.0: support Pico C SDK 
 */
 #define LIB_MAJOR_VER 2
-#define LIB_MINOR_VER 5
-#define LIB_BUILD_VER 6
+#define LIB_MINOR_VER 6
+#define LIB_BUILD_VER 0
 ////////////////////////////////////////////////////////////////////////////////////////////
 
 // #define dim(x) (sizeof(x) / sizeof(x[0]))
